@@ -6,9 +6,7 @@ import org.hibernate.Session;
 import com.simple.server.domain.contract.IContract;
 import com.simple.server.domain.sys.SysMessage;
 
-public interface MsgDao {
-	void send(IContract message) throws Exception;
-	void send(SysMessage message) throws Exception;
+public interface MsgDao {	
 	void insertBus(List<IContract> msgList) throws Exception;
 	Session currentSession() throws Exception;
 	void insertSys(List<SysMessage> msgList) throws Exception;

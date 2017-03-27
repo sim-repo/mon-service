@@ -2,8 +2,8 @@ package com.simple.server.tasks;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.simple.server.config.AppConfig;
-import com.simple.server.domain.AContract;
 import com.simple.server.domain.AbstractLogMsg;
+import com.simple.server.domain.contract.AContract;
 import com.simple.server.domain.contract.IContract;
 import com.simple.server.mediators.CommandType;
 import com.simple.server.statistics.time.Timing;

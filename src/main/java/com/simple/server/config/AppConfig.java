@@ -3,14 +3,13 @@ package com.simple.server.config;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.stereotype.Service;
 
 import com.simple.server.dao.MsgDao;
-import com.simple.server.domain.AContract;
 import com.simple.server.domain.AbstractLogMsg;
+import com.simple.server.domain.contract.AContract;
 import com.simple.server.domain.sys.SysMessage;
 import com.simple.server.factory.PhaserRunner;
 import com.simple.server.mediators.Mediator;
@@ -27,8 +26,11 @@ public class AppConfig {
 	private Subscriber subscriber = new Subscriber();
 
 	@Autowired
-	private MessageChannel busLogChannel;
-
+	private MessageChannel srvHealthTopicChannel;
+	
+	@Autowired
+	private MessageChannel srvPerfomTopicChannel;	
+	
 	@Autowired
 	private MessageChannel srvLogChannel;
 
@@ -49,6 +51,8 @@ public class AppConfig {
 
 	private Mediator mediator = new Mediator();
 
+		
+	
 	public Mediator getMediator() {
 		return mediator;
 	}
@@ -67,10 +71,18 @@ public class AppConfig {
 
 	public MsgDao getMsgDao() {
 		return msgDao;
+	}	
+
+	public static String getDateformat() {
+		return DATEFORMAT;
 	}
 
-	public MessageChannel getBusLogChannel() {
-		return busLogChannel;
+	public MessageChannel getSrvHealthTopicChannel() {
+		return srvHealthTopicChannel;
+	}
+
+	public MessageChannel getSrvPerfomTopicChannel() {
+		return srvPerfomTopicChannel;
 	}
 
 	public MessageChannel getSrvLogChannel() {
@@ -117,5 +129,4 @@ public class AppConfig {
 		this.sysMsgQueue = new LinkedBlockingQueue<>(size);
 	}
 
-	
 }

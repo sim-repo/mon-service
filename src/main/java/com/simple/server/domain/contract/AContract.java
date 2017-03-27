@@ -1,6 +1,4 @@
-package com.simple.server.domain;
-
-import com.simple.server.domain.contract.IContract;
+package com.simple.server.domain.contract;
 
 @SuppressWarnings("serial")
 public abstract class AContract implements IContract {

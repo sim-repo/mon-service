@@ -1,9 +1,7 @@
 package com.simple.server.service.remote;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-
 import com.simple.server.config.AppConfig;
 import com.simple.server.domain.contract.IContract;
 

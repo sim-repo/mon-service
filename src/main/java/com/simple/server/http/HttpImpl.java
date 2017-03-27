@@ -7,8 +7,7 @@ import com.simple.server.domain.sys.Jolokia;
 import com.simple.server.domain.sys.SysMsg;
 import com.simple.server.util.ObjectConverter;
 
-public class HttpImpl{
-
+public class HttpImpl {
 
 	public static String doGet(String url) throws Exception {
 		RestTemplate restTemplate = new RestTemplate();
@@ -20,13 +19,12 @@ public class HttpImpl{
 		RestTemplate restTemplate = new RestTemplate();
 		ResponseEntity<String> json = restTemplate.getForEntity(url, String.class);
 		Jolokia jolokia = new Jolokia();
-		jolokia = (Jolokia)ObjectConverter.JsonToObject(json.getBody(), jolokia);
+		jolokia = (Jolokia) ObjectConverter.jsonToObject(json.getBody(), jolokia);
 		return jolokia;
 	}
-	
+
 	public static SysMsg doPost(String url) throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
 }

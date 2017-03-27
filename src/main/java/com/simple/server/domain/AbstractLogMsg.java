@@ -13,5 +13,4 @@ public abstract class AbstractLogMsg implements IContract {
 	public void setClazz(String clazz) {
 		this.clazz = clazz;
 	}
-
 }

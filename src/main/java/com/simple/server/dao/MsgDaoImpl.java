@@ -1,9 +1,7 @@
 package com.simple.server.dao;
 
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.List;
-
 import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -13,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.simple.server.domain.contract.IContract;
 import com.simple.server.domain.sys.SysMessage;
 
@@ -31,11 +28,6 @@ public class MsgDaoImpl implements MsgDao{
 		
 	}
 
-	@Override
-	public void send(IContract message) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	@Transactional
@@ -53,12 +45,6 @@ public class MsgDaoImpl implements MsgDao{
 				currentSession().clear();
 			}
 		}
-	}
-
-	@Override
-	public void send(SysMessage message) throws Exception {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -93,6 +79,5 @@ public class MsgDaoImpl implements MsgDao{
 		Criteria criteria = currentSession().createCriteria(msg.getClass()).add(Restrictions.sqlRestriction(sql));
 		List<IContract> res = criteria.list();	
 		return res;
-	}
-	
+	}	
 }
