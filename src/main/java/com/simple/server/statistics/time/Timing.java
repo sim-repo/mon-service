@@ -9,7 +9,7 @@ import com.simple.server.statistics.Statistic;
 
 public class Timing extends TimerTask {
     public static final Long SLEEP = 1000l;
-    public static final Long PHASE_TIME_SLEEP = 2000l;
+    public static final Long PHASE_TIME_SLEEP = 30000l;
     
     private List<Statistic> statistics = new ArrayList<>();
 

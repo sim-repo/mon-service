@@ -31,4 +31,5 @@
 	<import resource="hibernate-settings.xml"/>
 	<import resource="inbound-gateway-scheme.xml"/>
 	<import resource="publish-settings.xml"/>	
+	
 </beans>

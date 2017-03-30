@@ -22,7 +22,8 @@ public class AppConfig {
 
 	
 	public final static String DATEFORMAT = "dd.MM.yyyy HH:mm:ss.SSSz";
-
+	public final static String SIMPLE_DATEFORMAT = "dd.MM.yyyy HH:mm:ss";
+	
 	private Subscriber subscriber = new Subscriber();
 
 	@Autowired
@@ -31,8 +32,8 @@ public class AppConfig {
 	@Autowired
 	private MessageChannel srvPerfomTopicChannel;	
 	
-	@Autowired
-	private MessageChannel srvLogChannel;
+	//@Autowired
+	//private MessageChannel srvLogChannel;
 
 	@Autowired
 	private IService msgService;
@@ -86,7 +87,8 @@ public class AppConfig {
 	}
 
 	public MessageChannel getSrvLogChannel() {
-		return srvLogChannel;
+		return null;
+		//return srvLogChannel;
 	}
 
 	public LinkedBlockingQueue<String> getDirtyBusJsonQueue() {

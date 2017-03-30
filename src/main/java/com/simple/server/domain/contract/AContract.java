@@ -169,6 +169,14 @@ public abstract class AContract implements IContract {
 
 	public void setResponseContractClass(String responseContractClass) {
 		this.responseContractClass = responseContractClass;
+	}	
+	
+	public String getOperationType() {
+		return operationType;
+	}
+
+	public void setOperationType(String operationType) {
+		this.operationType = operationType;
 	}
 
 	public String getClazz() {

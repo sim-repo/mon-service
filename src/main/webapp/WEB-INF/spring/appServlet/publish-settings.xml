@@ -21,14 +21,15 @@
     <bean id="connectionFactory" class="org.apache.activemq.spring.ActiveMQConnectionFactory">
         <property name="brokerURL" value="tcp://localhost:61616"/>
     </bean>
+
 	
     <int-jms:outbound-channel-adapter channel="srvHealthTopicChannel"
-                                      destination-name="srv.health.topic"
+                                      destination-name="amq.health.topic"
                                       connection-factory="connectionFactory"
                                       pub-sub-domain="true" />
                                       
 	<int-jms:outbound-channel-adapter channel="srvPerfomTopicChannel"
-                                      destination-name="srv.perfomance.topic"
+                                      destination-name="amq.perfomance.topic"
                                       connection-factory="connectionFactory"
                                       pub-sub-domain="true" />
                                                                          
