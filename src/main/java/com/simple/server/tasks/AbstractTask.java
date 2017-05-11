@@ -14,15 +14,16 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.simple.server.config.AppConfig;
 import com.simple.server.domain.contract.IContract;
+import com.simple.server.job.Statistic;
+import com.simple.server.job.time.Timing;
 import com.simple.server.lifecycle.BasePhaser;
 import com.simple.server.lifecycle.Deactivator;
 import com.simple.server.mediators.CommandType;
 import com.simple.server.mediators.Mediator;
 import com.simple.server.mediators.Subscriber;
 import com.simple.server.service.IService;
-import com.simple.server.statistics.Statistic;
-import com.simple.server.statistics.time.Timing;
 import com.simple.server.tasks.states.State;
 
 
@@ -190,7 +191,7 @@ public abstract class AbstractTask extends Observable implements Task, Callable,
             }
 
             try{
-                Thread.currentThread().sleep(Timing.getSleep());
+                Thread.currentThread().sleep(AppConfig.MAIN_SLEEP);
 
                 if(getOnBeforeStartTask() != null){
                     setChanged();

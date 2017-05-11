@@ -22,10 +22,7 @@ import com.simple.server.mediators.Mediator;
 import com.simple.server.mediators.ParameterType;
 import com.simple.server.service.IService;
 import com.simple.server.tasks.AbstractTask;
-import com.simple.server.tasks.BusDispatcherTask;
-import com.simple.server.tasks.BusLogMsgTask;
-import com.simple.server.tasks.HealthTask;
-import com.simple.server.tasks.PerfomTask;
+import com.simple.server.tasks.InitJobTask;
 import com.simple.server.tasks.Task;
 
 @Service("taskRunner")
@@ -103,10 +100,9 @@ public class TaskRunner {
 
 	public void initProcessing() {
 		try {
-			newRunTask(appConfig.getMediator(), BusDispatcherTask.class, 1);
-			newRunTask(appConfig.getMediator(), BusLogMsgTask.class, 1);
-			newRunTask(appConfig.getMediator(), HealthTask.class, 1);
-			newRunTask(appConfig.getMediator(), PerfomTask.class, 1);			
+		//	newRunTask(appConfig.getMediator(), BusDispatcherTask.class, 1);
+			newRunTask(appConfig.getMediator(), InitJobTask.class, 1);
+			//newRunTask(appConfig.getMediator(), PerfomTask.class, 1);			
 			BasePhaser hqlPhaser = appConfig.getPhaserRunner().newRunPhaser(appConfig.getMediator(), BasePhaser.class,
 					HqlStepsType.FINISH.ordinal());
 			appConfig.getMediator().wakeupAll();

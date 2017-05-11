@@ -5,8 +5,8 @@ import com.simple.server.config.AppConfig;
 import com.simple.server.domain.AbstractLogMsg;
 import com.simple.server.domain.contract.AContract;
 import com.simple.server.domain.contract.IContract;
+import com.simple.server.job.time.Timing;
 import com.simple.server.mediators.CommandType;
-import com.simple.server.statistics.time.Timing;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +51,7 @@ public class BusDispatcherTask extends AbstractTask {
 		if (appConfig.getDirtyBusJsonQueue().drainTo(list, MAX_NUM_ELEMENTS) == 0) {
 			list.add(appConfig.getDirtyBusJsonQueue().take());
 		}
-		Thread.currentThread().sleep(Timing.getSleep());
+		Thread.currentThread().sleep(AppConfig.MAIN_SLEEP);
 
 		// while (appConfig.getDirtyJsonQueue().size()>0) {
 		// Thread.currentThread().sleep(Timing.getTimeMaxSleep());
@@ -61,7 +61,7 @@ public class BusDispatcherTask extends AbstractTask {
 		try {
 			for (String json : list) {
 				IContract msg = mapper.readValue(json, IContract.class);
-				Thread.currentThread().sleep(Timing.getSleep());			
+				Thread.currentThread().sleep(AppConfig.MAIN_SLEEP);			
 				if (msg instanceof AContract) {					
 					appConfig.getBusClientMsgQueue().put((AContract)msg);
 				}			

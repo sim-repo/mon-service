@@ -1,6 +1,7 @@
 package com.simple.server.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -9,8 +10,10 @@ import org.springframework.messaging.MessageChannel;
 import org.springframework.stereotype.Service;
 
 import com.simple.server.config.AppConfig;
+import com.simple.server.config.MiscType;
 import com.simple.server.domain.contract.IContract;
 import com.simple.server.domain.sys.SysMessage;
+import com.simple.server.job.IJob;
 import com.simple.server.util.ObjectConverter;
 
 
@@ -35,41 +38,21 @@ public class ServiceImpl implements IService{
 		if (msgChannel==null || msg==null)
 			return;
 				
-		String json = ObjectConverter.objectToJson(msg);		
-		//System.out.println("mon::::: "+json);
+		String json = ObjectConverter.objectToJson(msg);			
 		msgChannel.send(MessageBuilder.withPayload( json ).setHeader(MON_HEADER_NAME, msg.getClass().getSimpleName()).build());			
 	}
 	
-	@Override
-	public void send(SysMessage message) throws Exception {
-		// TODO Auto-generated method stub		
-	}
 
 	@Override
-	public void insertBus(List<IContract> msgList) throws Exception {
-		getAppConfig().getMsgDao().insertBus(msgList);
-	}
-
+	public void insert(IJob job) throws Exception {
+		 getAppConfig().getMsgDao().insert(job);		
+	}	
+	
 	@Override
-	public void insertSys(List<SysMessage> msg) throws Exception {
-		// TODO Auto-generated method stub		
-	}
-
-	@Override
-	public void insertSql(String sql) throws Exception {
-		getAppConfig().getMsgDao().insertSql(sql);
-		
-	}
-
-	@Override
-	public List<IContract> readAll(IContract msg) throws Exception {		
-		List<IContract> res =  getAppConfig().getMsgDao().readAll(msg);
+	public List<?> readbyCriteria(Class<?> clazz, Map<String, Object> params, int topNum, Map<String, MiscType> orders) throws Exception {
+		List<?> res = getAppConfig().getMsgDao().readbyCriteria(clazz, params, topNum, orders);
 		return res;
 	}
 
-	@Override
-	public List<IContract> readbySQLCriteria(IContract msg, String sql) throws Exception {
-		List<IContract> res =  getAppConfig().getMsgDao().readbySQLCriteria(msg, sql);
-		return res;
-	}		
+	
 }

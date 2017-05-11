@@ -1,16 +1,17 @@
 package com.simple.server.dao;
 
 import java.util.List;
+import java.util.Map;
+
 import org.hibernate.Session;
 
+import com.simple.server.config.MiscType;
 import com.simple.server.domain.contract.IContract;
 import com.simple.server.domain.sys.SysMessage;
+import com.simple.server.job.IJob;
 
 public interface MsgDao {	
-	void insertBus(List<IContract> msgList) throws Exception;
 	Session currentSession() throws Exception;
-	void insertSys(List<SysMessage> msgList) throws Exception;
-	void insertSql(String sql) throws Exception;
-	List<IContract> readAll(IContract msg) throws Exception;
-	List<IContract> readbySQLCriteria(IContract msg, String sql) throws Exception;
+	void insert(IJob job) throws Exception;
+	List<?> readbyCriteria(Class<?> clazz, Map<String,Object> params, int topNum, Map<String,MiscType> orders) throws Exception;
 }

@@ -22,7 +22,7 @@
 	<bean id="inboundConnectionFactory"  class="org.springframework.jms.connection.CachingConnectionFactory">
 		<property name="targetConnectionFactory">
 			<bean class="org.apache.activemq.ActiveMQConnectionFactory">
-				<property name="brokerURL" value="tcp://localhost:61616?jms.useAsyncSend=true"/>	
+				<property name="brokerURL" value="tcp://localhost:61616"/>	
 				<property name="trustAllPackages" value="true"/>	
 			</bean>
 		</property>
@@ -31,38 +31,23 @@
 	</bean>	
 		
 	
-	<int:channel id="busLogChannel"/>
-	<int:channel id="srvLogChannel"/>
-	
-	<bean id="blq" class="org.apache.activemq.command.ActiveMQQueue">
-		<constructor-arg value="business.log.queue"/>
-	</bean>
-	
-	<bean id="slq" class="org.apache.activemq.command.ActiveMQQueue">
-		<constructor-arg value="service.log.queue"/>
-	</bean>
-	
-	<int-jms:inbound-gateway request-channel="busLogChannel"
-		request-destination="blq" connection-factory="inboundConnectionFactory"
-		recovery-interval="1" receive-timeout="1" reply-timeout="1"
-		request-timeout="1" />
+	<int:channel id="srvLogChannel"/>	
 
+	<bean id="slq" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg value="amq.mon.async.srv.queue"/>
+	</bean>
+	
 		
 	<int-jms:inbound-gateway request-channel="srvLogChannel"
 		request-destination="slq" connection-factory="inboundConnectionFactory"
 		recovery-interval="5" receive-timeout="1" reply-timeout="1"
 		request-timeout="1" />
 
-
-	<int:service-activator id="service-activator"
-                                         ref="busMsgHandler"
-                                         method="handleBusJsonMsg"
-                                         input-channel="busLogChannel"/>	
-                                         
                                          
 	<int:service-activator id="business-activator"
                                          ref="srvMsgHandler"
                                          method="handleSrvJsonMsg"
-                                         input-channel="srvLogChannel"/>                                         		 		
-
+                                         input-channel="srvLogChannel"/>                                                                                                                            
+                                                                              
+                                                                                		 	
 </beans>			

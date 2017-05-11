@@ -1,18 +1,20 @@
 package com.simple.server.dao;
 
-import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
+
 import org.hibernate.Criteria;
-import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
+import com.simple.server.config.MiscType;
 import com.simple.server.domain.contract.IContract;
-import com.simple.server.domain.sys.SysMessage;
+import com.simple.server.job.IJob;
 
 
 @Service("msgDao")
@@ -27,57 +29,34 @@ public class MsgDaoImpl implements MsgDao{
 		return mysqlSessionFactory.getCurrentSession();
 		
 	}
-
-
+	
 	@Override
-	@Transactional
-	public void insertBus(List<IContract> msgList) throws Exception {
-		int count=0;
-		for(IContract msg: msgList){
-			try{			
-				//System.out.println("log: "+msg);
-				currentSession().saveOrUpdate(msg);	
-			}catch(SQLException e){
-				e.printStackTrace();
-			}			
-			if (++count % 50 == 0 ) {
-				currentSession().flush();
-				currentSession().clear();
-			}
-		}
-	}
-
-	@Override
-	public void insertSys(List<SysMessage> msgList) throws Exception {
-		int count=0;
-		for(SysMessage msg: msgList){
-			currentSession().save(msg);	
-			if (++count % 50 == 0 ) {
-				currentSession().flush();
-				currentSession().clear();
-			}
-		}		
-	}
-	@Transactional
-	@Override
-	public void insertSql(String sql) throws Exception{
-		SQLQuery query = currentSession().createSQLQuery(sql);
-		query.executeUpdate();
+	public void insert(IJob job) throws Exception {
+		currentSession().saveOrUpdate(job);	
 	}
 	
 	@Override
-	@Transactional
-	public List<IContract> readAll(IContract msg) throws Exception {
-		Criteria criteria = currentSession().createCriteria(msg.getClass());
-		List<IContract> res = criteria.list();	
+	public List<?> readbyCriteria(Class<?> clazz, Map<String,Object> params, int topNum, Map<String,MiscType> orders) throws Exception{		
+		Criteria criteria = currentSession().createCriteria(clazz);	
+		if(params != null)
+			for(Map.Entry<String,Object> pair: params.entrySet()){						
+				criteria.add(Restrictions.eq(pair.getKey(), pair.getValue()));			
+			}		
+		if(topNum != 0){
+			criteria.setMaxResults(topNum);
+		}
+		if(orders != null && orders.size() != 0){
+			for(Map.Entry<String, MiscType> pair: orders.entrySet()){
+				String fld = pair.getKey();								
+				if(pair.getValue().equals(MiscType.asc))
+					criteria.addOrder(Order.asc(fld));
+				else
+					if(pair.getValue().equals(MiscType.desc))
+						criteria.addOrder(Order.desc(fld));
+			}
+		}
+						
+		List<?> res = criteria.list();				
 		return res;
 	}
-
-	@Override
-	@Transactional
-	public List<IContract> readbySQLCriteria(IContract msg, String sql) throws Exception {
-		Criteria criteria = currentSession().createCriteria(msg.getClass()).add(Restrictions.sqlRestriction(sql));
-		List<IContract> res = criteria.list();	
-		return res;
-	}	
 }

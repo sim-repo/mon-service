@@ -50,6 +50,19 @@ public class DateTimeConverter {
 		        .toFormatter();
 		
 	
+	public static Date add(Date since, int days, int hours, int minutes){
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(since);
+		if(days != 0)
+			cal.add(Calendar.DAY_OF_MONTH, days);
+		if(hours != 0)
+			cal.add(Calendar.HOUR, hours);
+		if(minutes != 0)
+			cal.add(Calendar.MINUTE, minutes);
+		Date dt = cal.getTime();
+		return dt;
+	}
+	
 	public static String getCurDate(){		
 		return new SimpleDateFormat(AppConfig.DATEFORMAT).format(Calendar.getInstance().getTime());
 	}

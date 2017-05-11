@@ -1,4 +1,4 @@
-package com.simple.server.statistics;
+package com.simple.server.job;
 
 public interface Statistic {
     public void setCurrUnitSum(int currUnitSum);

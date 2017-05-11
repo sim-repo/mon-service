@@ -12,6 +12,7 @@ import com.simple.server.domain.AbstractLogMsg;
 import com.simple.server.domain.contract.AContract;
 import com.simple.server.domain.sys.SysMessage;
 import com.simple.server.factory.PhaserRunner;
+import com.simple.server.job.time.JobMgt;
 import com.simple.server.mediators.Mediator;
 import com.simple.server.mediators.Subscriber;
 import com.simple.server.service.IService;
@@ -23,6 +24,10 @@ public class AppConfig {
 	
 	public final static String DATEFORMAT = "dd.MM.yyyy HH:mm:ss.SSSz";
 	public final static String SIMPLE_DATEFORMAT = "dd.MM.yyyy HH:mm:ss";
+	
+	public final static Long MAIN_SLEEP = 5l;
+	public final static Long MAIN_PHASE_SLEEP = 2000l;
+	public final static Long MAIN_TASK_AFTER_DONE_SLEEP = 10000l;
 	
 	private Subscriber subscriber = new Subscriber();
 
@@ -44,15 +49,17 @@ public class AppConfig {
 	@Autowired
 	private PhaserRunner phaserRunner;
 	
+	@Autowired
+	private JobMgt jobMgt;
+	
 	private LinkedBlockingQueue<String> dirtyBusJsonQueue;
 	private LinkedBlockingQueue<String> dirtySrvJsonQueue;
 	private LinkedBlockingQueue<AContract> busClientMsgQueue;
 	private LinkedBlockingQueue<AbstractLogMsg> busLogMsgQueue;	
 	private LinkedBlockingQueue<SysMessage> sysMsgQueue;
 
-	private Mediator mediator = new Mediator();
-
-		
+	private Mediator mediator = new Mediator();	
+	
 	
 	public Mediator getMediator() {
 		return mediator;
@@ -76,6 +83,10 @@ public class AppConfig {
 
 	public static String getDateformat() {
 		return DATEFORMAT;
+	}
+	
+	public JobMgt getJobMgt() {
+		return jobMgt;
 	}
 
 	public MessageChannel getSrvHealthTopicChannel() {

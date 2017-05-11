@@ -34,7 +34,7 @@
 	<int:channel id="srvLogChannel"/>	
 
 	<bean id="slq" class="org.apache.activemq.command.ActiveMQQueue">
-		<constructor-arg value="amq.log.async.srv.queue"/>
+		<constructor-arg value="amq.mon.async.srv.queue"/>
 	</bean>
 	
 		

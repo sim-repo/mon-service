@@ -4,10 +4,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
+import com.simple.server.job.Statistic;
 import com.simple.server.lifecycle.BasePhaser;
 import com.simple.server.mediators.CommandType;
 import com.simple.server.mediators.Subscriber;
-import com.simple.server.statistics.Statistic;
 
 public interface Task {
 	 	void task() throws Exception;

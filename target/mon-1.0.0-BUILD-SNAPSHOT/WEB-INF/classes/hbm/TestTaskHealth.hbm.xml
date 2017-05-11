@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.simple.server.domain.contract">
+						
+	<class name="FullLifecycle" table="[test full lifecycle routing]">
+		
+		<id name="testId" column="[test_id]">
+			<generator class="assigned" />
+		</id>					
+		
+		<property name="jobClazz" column="[job_clazz]"/>
+		<property name="targetTaskClazz" column="[target_task_clazz]"/>
+		
+		<property name="juuid" column="[juuid]" />
+		<property name="senderId" column="[sender_id]"/>										
+		<property name="body" column="[body]" />
+				
+		<property name="timeout" column="[timeout]" />		
+				
+		<property name="targetWhen" column="[target_when]" />
+		<property name="targetPeriod" column="[target_period]" />
+		<property name="targetDelay" column="[target_delay]" />
+		<property name="targetUntil" column="[target_until]" />
+				
+		<property name="jobWhen" column="[job_when]" />
+		<property name="jobUntil" column="[job_until]" />
+		<property name="jobDelay" column="[job_delay]" />
+		<property name="jobPeriod" column="[job_period]" />
+						
+	</class>
+</hibernate-mapping>

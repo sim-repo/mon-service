@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.simple.server.job.time">
+						
+	<class name="MySchedule" table="[test scheduler]">
+		
+		<id name="testId" column="[test_id]">
+			<generator class="assigned" />
+		</id>					
+		
+		
+		<property name="sunday" column="[sunday]" type="yes_no"/>
+		<property name="monday" column="[monday]" type="yes_no"/>
+		<property name="tuesday" column="[tuesday]" type="yes_no"/>
+		<property name="wednesday" column="[wednesday]" type="yes_no"/>
+		<property name="thursday" column="[thursday]" type="yes_no"/>
+		<property name="friday" column="[friday]" type="yes_no"/>
+		<property name="saturday" column="[saturday]" type="yes_no"/>
+								
+	</class>
+</hibernate-mapping>

@@ -10,9 +10,9 @@ import com.simple.server.config.AppConfig;
 import com.simple.server.config.OperationType;
 import com.simple.server.domain.contract.AContract;
 import com.simple.server.domain.contract.MonMsg;
+import com.simple.server.job.time.Timing;
 import com.simple.server.lifecycle.HqlStepsType;
 import com.simple.server.mediators.CommandType;
-import com.simple.server.statistics.time.Timing;
 import com.simple.server.util.DateTimeConverter;
 
 @SuppressWarnings("static-access")
@@ -25,7 +25,7 @@ public class PerfomTask extends AbstractTask {
 
 	private MonMsg mon = new MonMsg();
 
-	private boolean flag = true;
+	private int count = 0;
 
 	@Override
 	public void update(Observable o, Object arg) {
@@ -50,19 +50,21 @@ public class PerfomTask extends AbstractTask {
 
 		mon.setTaskClazz("com.simple.server.task.PubTask");
 		mon.setBeanStatClazz("perfomancerStat");
-		mon.setWhen(DateTimeConverter.add2CurDate(0, 0, 1));
+		//mon.setWhen(DateTimeConverter.add2CurDate(0, 0, 1));
 		mon.setUntil(DateTimeConverter.add2CurDate(0, 0, 4));
-		//mon.setDelay(50000l);
+		mon.setDelay(100l);
 		mon.setPeriod(1000l);
 		mon.setOperationType(OperationType.MON_START.toValue());
 		while (basePhaser.getCurrNumPhase() != HqlStepsType.START.ordinal()) {
 		}
-		if (flag) {
+	
+		count++;
+		if (count == 10) {
 			System.out.println("Perfomance-task");
 
-			Thread.currentThread().sleep(Timing.getSleep());
+			Thread.currentThread().sleep(AppConfig.MAIN_SLEEP);
 			appConfig.getMsgService().send(appConfig.getSrvPerfomTopicChannel(), (AContract) mon);
-			flag = false;
+			count = 0;
 		}
 	}
 }

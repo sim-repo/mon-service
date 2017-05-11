@@ -15,8 +15,8 @@ import org.springframework.stereotype.Service;
 
 import com.simple.server.config.AppConfig;
 import com.simple.server.factory.TaskRunner;
+import com.simple.server.job.time.Timing;
 import com.simple.server.mediators.CommandType;
-import com.simple.server.statistics.time.Timing;
 import com.simple.server.tasks.AbstractTask;
 import com.simple.server.tasks.Task;
 
@@ -81,14 +81,14 @@ public class BasePhaser extends AbstractTask {
         phaser = new Phaser(1);
         currNumPhase.set(0);
         
-        Thread.currentThread().sleep(Timing.getPhaseTimeSleep());
+        Thread.currentThread().sleep(appConfig.MAIN_PHASE_SLEEP);
         nextPhase();
 
-        Thread.currentThread().sleep(Timing.getPhaseTimeSleep());
+        Thread.currentThread().sleep(appConfig.MAIN_PHASE_SLEEP);
 
         for (int i = currNumPhase.get(); i < lastStep; i++) {
             nextPhase();
-            Thread.currentThread().sleep(Timing.getPhaseTimeSleep());
+            Thread.currentThread().sleep(appConfig.MAIN_PHASE_SLEEP);
         }
         phaser.arriveAndDeregister();
         phaser = null;

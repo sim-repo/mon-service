@@ -38,7 +38,13 @@
 				<prop key="hibernate.show_sql">true</prop>
 				<prop key="hibernate.jdbc.batch_size">50</prop>
 			</props>
-		</property>		
+		</property>	
+		<property name="mappingResources">
+			<list>
+				<value>hbm/TestLifecycle.hbm.xml</value>
+				<value>hbm/TestScheduler.hbm.xml</value>						
+			</list>
+		</property>			
 	</bean>
 	
 	

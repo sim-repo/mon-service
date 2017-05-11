@@ -21,7 +21,7 @@
 	<bean id="mysqlDS"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<property name="url" value="jdbc:mysql://localhost:3306/jdb?serverTimezone=UTC&amp;autoReconnect=true&amp;useSSL=false" />
+		<property name="url" value="jdbc:mysql://localhost:3306/jdb?useTimezone=true&amp;serverTimezone=UTC&amp;autoReconnect=true&amp;useSSL=false" />
 		<property name="username" value="root" />
 		<property name="password" value="root" />
 	</bean>
@@ -38,7 +38,12 @@
 				<prop key="hibernate.show_sql">true</prop>
 				<prop key="hibernate.jdbc.batch_size">50</prop>
 			</props>
-		</property>		
+		</property>	
+		<property name="mappingResources">
+			<list>
+				<value>hbm/TestLifecycle.hbm.xml</value>		
+			</list>
+		</property>			
 	</bean>
 	
 	

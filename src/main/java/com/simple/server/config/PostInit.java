@@ -1,5 +1,7 @@
 package com.simple.server.config;
 
+import java.util.TimeZone;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
@@ -34,6 +36,8 @@ public class PostInit implements ApplicationListener<ContextRefreshedEvent> {
 	  
 	  @Override
 	  public void onApplicationEvent(final ContextRefreshedEvent event) {
+		  	
+		  TimeZone.setDefault(TimeZone.getTimeZone("Europe/Moscow"));
 		  
 		  appConfig.initDirtyBusJsonQueue(dirtyBusJsonQueueCapacity);
 		  appConfig.initDirtySrvJsonQueue(dirtySrvJsonQueueCapacity);
