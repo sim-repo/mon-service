@@ -5,12 +5,12 @@
 
 <hibernate-mapping package="com.simple.server.job">
 						
-	<class name="LifecycleJob" table="[test lifecycle]">
+	<class name="TestCaseJob" table="[test case job]">
 		
 		<id name="testId" column="[test_id]">
 			<generator class="assigned" />
 		</id>					
-		
+				
 		
 		<property name="eventId" column="[event_id]"/>
 		<property name="serviceHandler" column="[service_handler]" />
@@ -29,12 +29,25 @@
 		<property name="jobDelay" column="[job_delay]" />
 		<property name="jobPeriod" column="[job_period]" />		
 		
+		<property name="updateHashCodes" column="[update_hash_codes]" />
+		<property name="hasErrors" column="[has_errors]" />
+		<property name="lastUpdatedDatetime" column="[last_checking_datetime]" />
+		
+		
+		<property name="contentType" column="[content_type]">
+		    <type name="org.hibernate.type.EnumType">
+		        <param name="enumClass">com.simple.server.config.ContentType</param>
+		        <param name="useNamed">true</param>
+		    </type>
+		</property>
+		
 		<property name="status" column="[status]">
 		    <type name="org.hibernate.type.EnumType">
 		        <param name="enumClass">com.simple.server.config.JobStatusType</param>
 		        <param name="useNamed">true</param>
 		    </type>
 		</property>
+						
 						
 	</class>
 </hibernate-mapping>

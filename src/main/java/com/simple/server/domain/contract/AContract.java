@@ -23,8 +23,7 @@ public abstract class AContract implements IContract {
 	protected String serviceIdTo;
 	protected String incomingDatetime;
 	protected String messageHeaderValue;
-	protected String messageBodyValue;
-	protected String logDatetime = DateTimeConverter.getCurDate();
+	protected String messageBodyValue;	
 	protected String loggerId;
 	protected String methodHandler;
 	protected String serviceRoleFrom;
@@ -108,13 +107,6 @@ public abstract class AContract implements IContract {
 		this.messageBodyValue = messageBodyValue;
 	}
 
-	public String getLogDatetime() {
-		return logDatetime;
-	}
-
-	public void setLogDatetime(String logDatetime) {
-		this.logDatetime = logDatetime;
-	}
 
 	public String getLoggerId() {
 		return loggerId;

@@ -33,7 +33,7 @@ public class BusMsgJsonDeserializer extends JsonDeserializer<IContract> {
 				}		            		 		            		 		            				            		 		            		
 	            return msg;		    	            			    	           
 	    }
-		throw context.mappingException("log-service: failed to de-serialize message.");	    		
+		throw context.mappingException("mon-service: failed to de-serialize message.");	    		
 	}
 		
 	public static <T> Class<T> getClass(final String className, Class<T> ifaceClass)  throws ClassNotFoundException {			    			

@@ -29,7 +29,7 @@ public class SysMsgJsonDeserializer extends JsonDeserializer<SysMessage> {
 	                return mapper.readValue(root.toString(), SysMsg.class);
 	            }	            	            	       
 	    }
-		throw context.mappingException("log-service: failed to de-serialize message");	    		
+		throw context.mappingException("mon-service: failed to de-serialize message");	    		
 	}
 }
 

@@ -14,7 +14,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
-
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
 import com.simple.server.domain.contract.AContract;
 
 public class ObjectConverter {
@@ -68,6 +69,12 @@ public class ObjectConverter {
 	     return t;
 	}
 	
+	public synchronized static String objectToXml(Object object, Boolean useDeclaration) throws Exception{
+		XmlMapper xmlMapper = new XmlMapper();
+		xmlMapper.configure(ToXmlGenerator.Feature.WRITE_XML_DECLARATION, useDeclaration);
+		String xml = xmlMapper.writeValueAsString(object);		
+		return xml;
+	}
 	
 	public synchronized static Object xmlToObject(String xml, Class clazz) throws Exception{
 		JAXBContext jaxbContext = JAXBContext.newInstance(clazz);

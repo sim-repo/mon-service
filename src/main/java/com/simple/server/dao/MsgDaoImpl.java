@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import com.simple.server.config.MiscType;
 import com.simple.server.domain.contract.IContract;
+import com.simple.server.domain.contract.UniMinMsg;
+import com.simple.server.domain.sys.SysMessage;
 import com.simple.server.job.IJob;
 
 
@@ -33,6 +35,11 @@ public class MsgDaoImpl implements MsgDao{
 	@Override
 	public void insert(IJob job) throws Exception {
 		currentSession().saveOrUpdate(job);	
+	}
+	
+	@Override
+	public void insert(SysMessage msg) throws Exception {
+		currentSession().saveOrUpdate(msg);		
 	}
 	
 	@Override
@@ -59,4 +66,6 @@ public class MsgDaoImpl implements MsgDao{
 		List<?> res = criteria.list();				
 		return res;
 	}
+
+	
 }

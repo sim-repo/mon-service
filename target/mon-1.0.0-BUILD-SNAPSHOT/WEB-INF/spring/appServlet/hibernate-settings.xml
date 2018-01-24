@@ -21,7 +21,7 @@
 	<bean id="mysqlDS"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<property name="url" value="jdbc:mysql://localhost:3306/jdb?useTimezone=true&amp;serverTimezone=UTC&amp;autoReconnect=true&amp;useSSL=false" />
+		<property name="url" value="jdbc:mysql://localhost:3306/jdb?serverTimezone=UTC&amp;autoReconnect=true&amp;useSSL=false" />
 		<property name="username" value="root" />
 		<property name="password" value="root" />
 	</bean>
@@ -41,7 +41,9 @@
 		</property>	
 		<property name="mappingResources">
 			<list>
-				<value>hbm/TestLifecycle.hbm.xml</value>		
+				<value>hbm/TestLifecycle.hbm.xml</value>
+				<value>hbm/TestScheduler.hbm.xml</value>
+				<value>hbm/TestIncomingBuffer.hbm.xml</value>						
 			</list>
 		</property>			
 	</bean>

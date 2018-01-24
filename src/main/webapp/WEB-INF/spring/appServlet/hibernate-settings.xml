@@ -41,8 +41,15 @@
 		</property>	
 		<property name="mappingResources">
 			<list>
-				<value>hbm/TestLifecycle.hbm.xml</value>
-				<value>hbm/TestScheduler.hbm.xml</value>						
+				<value>hbm/PubError.hbm.xml</value>
+				<value>hbm/PubHot.hbm.xml</value>
+				<value>hbm/PubLog.hbm.xml</value>
+				<value>hbm/PubSuccess.hbm.xml</value>		
+				<value>hbm/TestCaseAssert.hbm.xml</value>		
+				
+				<value>hbm/TestCaseJob.hbm.xml</value>
+				<value>hbm/TestScheduler.hbm.xml</value>
+				<value>hbm/TestIncomingBuffer.hbm.xml</value>						
 			</list>
 		</property>			
 	</bean>

@@ -1,6 +1,8 @@
 package com.simple.server.job;
 
 import java.util.Date;
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -24,6 +26,7 @@ public class TaskHealthJob implements IJob{
 	
 	@Override
 	public void run() throws Exception {
+		/*
 		MonMsg mon = new MonMsg();
 		mon.setTaskClazz("com.simple.server.task.PubTask");
 		mon.setBeanStatClazz("perfomancerStat");
@@ -33,6 +36,64 @@ public class TaskHealthJob implements IJob{
 		mon.setPeriod(1000l);
 		mon.setOperationType(OperationType.MON_START.toValue());
 		appConfig.getMsgService().send(appConfig.getSrvPerfomTopicChannel(), (AContract) mon);
+		*/
+		
+		CyclicBarrier cb = new CyclicBarrier(2);
+		
+		
+		Runnable barrier1Action = new Runnable() {		
+			private CyclicBarrier cb = null;
+			Runnable setCB(CyclicBarrier cb) {
+				this.cb = cb;
+				return this;
+			}
+		    public void run() {
+		        System.out.println("BarrierAction 1 executed ");
+		        try {
+					cb.await();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (BrokenBarrierException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		        System.out.println("BarrierAction 1 well done ");
+		    }
+		}.setCB(cb);
+		
+		Runnable barrier2Action = new Runnable() {		
+			private CyclicBarrier cb = null;
+			Runnable setCB(CyclicBarrier cb) {
+				this.cb = cb;
+				return this;
+			}
+		    public void run() {
+		        System.out.println("BarrierAction 2 executed ");
+		        try {
+					Thread.currentThread().sleep(4000l);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		        try {
+					cb.await();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (BrokenBarrierException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		        System.out.println("BarrierAction 2 well done ");
+		    }
+		}.setCB(cb);
+		
+		
+
+		new Thread(barrier1Action).start();
+		new Thread(barrier2Action).start();
+		
 	}
 
 	@Override
@@ -71,6 +132,12 @@ public class TaskHealthJob implements IJob{
 	}
 
 	public void setStatus(JobStatusType status) {
+		
+	}
+
+	@Override
+	public void setAppConfig(AppConfig appConfig) {
+		// TODO Auto-generated method stub
 		
 	}
 

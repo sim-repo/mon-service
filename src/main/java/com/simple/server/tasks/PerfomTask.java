@@ -60,7 +60,7 @@ public class PerfomTask extends AbstractTask {
 	
 		count++;
 		if (count == 10) {
-			System.out.println("Perfomance-task");
+			//System.out.println("Perfomance-task");
 
 			Thread.currentThread().sleep(AppConfig.MAIN_SLEEP);
 			appConfig.getMsgService().send(appConfig.getSrvPerfomTopicChannel(), (AContract) mon);

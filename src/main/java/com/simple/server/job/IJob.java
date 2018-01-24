@@ -2,6 +2,7 @@ package com.simple.server.job;
 
 import java.util.Date;
 
+import com.simple.server.config.AppConfig;
 import com.simple.server.config.JobStatusType;
 
 public interface IJob {
@@ -15,4 +16,5 @@ public interface IJob {
 	
 	JobStatusType getStatus();
 	void setStatus(JobStatusType status);
+	void setAppConfig(AppConfig appConfig);
 }

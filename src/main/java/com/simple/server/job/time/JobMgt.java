@@ -34,7 +34,7 @@ public class JobMgt {
 		return true;
 	}
 
-	public void create(IJob job) throws Exception {
+	public void register(IJob job) throws Exception {
 		if (canRun(job)) {
 			Timing timing = (Timing) getExists(job);
 			if (timing == null) {

@@ -105,6 +105,14 @@
 		    <version>${jackson-version}</version>
 		</dependency>
 				
+		
+		<dependency>
+		    <groupId>com.fasterxml.jackson.dataformat</groupId>
+		    <artifactId>jackson-dataformat-xml</artifactId>
+		    <version>${jackson-version}</version>
+		</dependency>
+						
+				
 		<!-- Joda Time -->
 		<dependency>
 			<groupId>joda-time</groupId>

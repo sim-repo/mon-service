@@ -23,6 +23,7 @@ import com.simple.server.mediators.ParameterType;
 import com.simple.server.service.IService;
 import com.simple.server.tasks.AbstractTask;
 import com.simple.server.tasks.InitJobTask;
+import com.simple.server.tasks.PerfomTask;
 import com.simple.server.tasks.Task;
 
 @Service("taskRunner")

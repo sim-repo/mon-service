@@ -5,7 +5,7 @@
 
 <hibernate-mapping package="com.simple.server.job.time">
 						
-	<class name="MySchedule" table="[test scheduler]">
+	<class name="MySchedule" table="[test case scheduler]">
 		
 		<id name="testId" column="[test_id]">
 			<generator class="assigned" />

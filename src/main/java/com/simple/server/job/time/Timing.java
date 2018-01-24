@@ -31,8 +31,7 @@ public class Timing extends TimerTask {
 	private IJob job = null;
 
 
-	public void initTimer(IJob job) throws Exception{
-
+	public void initTimer(IJob job) throws Exception{		
 		setUntil(job);
 		firstRun = true;
 		this.when = job.getJobWhen();
@@ -86,7 +85,7 @@ public class Timing extends TimerTask {
 
 	@Override
 	public void run() {
-		try {
+		try {			
 			if (firstRun) {
 				firstRun = false;
 				job.setStatus(JobStatusType.RUNNING);

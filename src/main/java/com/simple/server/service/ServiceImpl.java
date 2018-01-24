@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.simple.server.config.AppConfig;
 import com.simple.server.config.MiscType;
 import com.simple.server.domain.contract.IContract;
+import com.simple.server.domain.contract.UniMinMsg;
 import com.simple.server.domain.sys.SysMessage;
 import com.simple.server.job.IJob;
 import com.simple.server.util.ObjectConverter;
@@ -49,10 +50,14 @@ public class ServiceImpl implements IService{
 	}	
 	
 	@Override
+	public void insert(SysMessage msg) throws Exception {
+		 getAppConfig().getMsgDao().insert(msg);
+		
+	}
+	
+	@Override
 	public List<?> readbyCriteria(Class<?> clazz, Map<String, Object> params, int topNum, Map<String, MiscType> orders) throws Exception {
 		List<?> res = getAppConfig().getMsgDao().readbyCriteria(clazz, params, topNum, orders);
 		return res;
-	}
-
-	
+	}	
 }

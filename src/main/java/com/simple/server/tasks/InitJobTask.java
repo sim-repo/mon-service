@@ -12,7 +12,8 @@ import org.springframework.stereotype.Service;
 
 import com.simple.server.config.AppConfig;
 import com.simple.server.config.JobStatusType;
-import com.simple.server.job.LifecycleJob;
+import com.simple.server.job.TestCaseJob;
+import com.simple.server.job.TaskHealthJob;
 import com.simple.server.job.time.MySchedule;
 import com.simple.server.lifecycle.HqlStepsType;
 import com.simple.server.mediators.CommandType;
@@ -59,15 +60,15 @@ public class InitJobTask extends AbstractTask {
 	@Override
 	public void task() throws Exception {
 
-		List<LifecycleJob> jobs = (List<LifecycleJob>) appConfig.getMsgService().readbyCriteria(LifecycleJob.class, map1, 0,null);
+		List<TestCaseJob> jobs = (List<TestCaseJob>) appConfig.getMsgService().readbyCriteria(TestCaseJob.class, map1, 0,null);
 				
-		List<MySchedule> sch = (List<MySchedule>) appConfig.getMsgService().readbyCriteria(MySchedule.class, null, 0,null);
+		//List<MySchedule> sch = (List<MySchedule>) appConfig.getMsgService().readbyCriteria(MySchedule.class, null, 0,null);
 		
 		//List<LifecycleJob> forcedJobs = (List<LifecycleJob>) appConfig.getMsgService().<LifecycleJob>readbyCriteria(LifecycleJob.class, map2, 0,null);
 		
-		for(MySchedule s : sch){
-			System.out.println(s);
-		}		
+		//for(MySchedule s : sch){
+		//	System.out.println(s);
+		//}		
 		
 		while (basePhaser.getCurrNumPhase() != HqlStepsType.START.ordinal()) {
 		}
@@ -76,8 +77,9 @@ public class InitJobTask extends AbstractTask {
 		//	appConfig.getJobMgt().create(job);						
 		//}
 		
-		for (LifecycleJob job : jobs) {
-			appConfig.getJobMgt().create(job);						
+		for (TestCaseJob job : jobs) {
+			job.setAppConfig(appConfig);
+			appConfig.getJobMgt().register(job);						
 		}			
 		Thread.currentThread().sleep(AppConfig.MAIN_TASK_AFTER_DONE_SLEEP);
 	}

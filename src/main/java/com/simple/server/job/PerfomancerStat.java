@@ -11,7 +11,7 @@ import com.simple.server.factory.TaskRunner;
 import com.simple.server.tasks.Task;
 
 
-@Service("perfomancerStat")
+@Service("perfomancerStats")
 @Scope("prototype")
 public class PerfomancerStat implements Statistic {
 	@Autowired
