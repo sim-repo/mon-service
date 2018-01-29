@@ -32,28 +32,42 @@ public class Timing extends TimerTask {
 
 
 	public void initTimer(IJob job) throws Exception{		
-		setUntil(job);
+		
+		if(job.getJobPeriod() != null && job.getJobPeriod() != 0l) {
+			this.period = job.getJobPeriod();
+			setUntil(job);
+		}
+			
 		firstRun = true;
-		this.when = job.getJobWhen();
-		this.period = job.getJobPeriod();
+		this.when = job.getJobWhen();		
 		this.delay = job.getJobDelay();
+		
 		if (when != null) {
 			schedule(when, period);
-		} else if (delay != 0l) {
+		} else if (delay != null && delay != 0l) {
 			schedule(delay, period);
-		}	
+		}		
 		this.job = job;
 	}
 
-	private void schedule(Date when, long period) {
+	private void schedule(Date when, Long period) {
 		timer = new Timer(false);
-		timer.scheduleAtFixedRate(this, when, period);
+		if(period != null && period != 0l) {
+			timer.scheduleAtFixedRate(this, when, period);
+		}else {
+			timer.schedule(this, when);
+		}
 	}
 
-	private void schedule(long delay, long period) {
+	private void schedule(Long delay, Long period) {
 		timer = new Timer(false);
-		timer.scheduleAtFixedRate(this, delay, period);
+		if(period != null && period != 0l) {
+			timer.scheduleAtFixedRate(this, delay, period);
+		}else {
+			timer.schedule(this, delay);
+		}
 	}
+		
 
 	public void setUntil(IJob job) {
 		if (job.getJobUntil() != null)
@@ -67,43 +81,82 @@ public class Timing extends TimerTask {
 		}
 	}
 
-	private void clear() {
+	public void clear() {
 		this.timer = null;
 		this.when = null;
 		this.until = null;
 		this.delay = null;
-		this.period = null;
-		appConfig.getJobMgt().removeFromRegister(job);		
+		this.period = null;				
+	}
+	
+	public void setNextJob(IJob job) {
+		this.job = job;
+		firstRun = true;
 	}
 
 	private void afterDone() throws Exception {
-		clear();
-		job.setStatus(JobStatusType.DONE);
-		appConfig.getMsgService().insert(job);
-		this.job = null;
+		appConfig.getJobMgt().jobDone(this.job, this);			
 	}
+	
+	private void handleErr() throws Exception {
+		appConfig.getJobMgt().jobErr(this.job, this);	
+	}
+	
+	
+	public void stopTiming() {
+		timer.cancel();
+	}
+		
 
 	@Override
 	public void run() {
 		try {			
 			if (firstRun) {
 				firstRun = false;
-				job.setStatus(JobStatusType.RUNNING);
-				appConfig.getMsgService().insert(job);
+				appConfig.getJobMgt().jobStarted(job);
 			}
 
 			if (until != null) {
 				Date date = new Date();
-				if (date.after(until)) {
-					timer.cancel();
+				if (date.after(until)) {					
 					afterDone();
 				} else {
 					job.run();
 				}
+			}else {
+				job.run();				
+				afterDone();
+			}			
+		} catch (Exception e) {			
+			try {
+				handleErr();
+			} catch (Exception e1) {
+				e1.printStackTrace();
 			}
-		} catch (Exception e) {
-			// TODO Exception to log
 			e.printStackTrace();
 		}
 	}
+
+	public void setWhen(Date when) {
+		this.when = when;
+	}
+
+	public void setUntil(Date until) {
+		this.until = until;
+	}
+
+	public void setDelay(Long delay) {
+		this.delay = delay;
+	}
+
+	public void setPeriod(Long period) {
+		this.period = period;
+	}
+
+	public void setJob(IJob job) {
+		this.job = job;
+	}
+	
+	
+	
 }

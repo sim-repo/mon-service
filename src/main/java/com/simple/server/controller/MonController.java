@@ -27,6 +27,7 @@ public class MonController {
 	
 	@RequestMapping(value = "json/pub/uni", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> jsonPub(@RequestBody UniMsg msg) {
+		System.out.println(msg.toString());
 		HttpHeaders headers = new HttpHeaders();		
 		try {			
 			IncomingBuffer ib = new IncomingBuffer();
@@ -35,12 +36,58 @@ public class MonController {
 			ib.setEventId(msg.getEventId());
 			ib.setMsg(msg.toString());
 			
-			appConfig.getMsgService().insert(ib);
-			System.out.println(msg);
+			appConfig.getMsgService().insert(ib);		
 			return new ResponseEntity<String>("", headers, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<String>(e.getCause().toString(), headers, HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	
+	@RequestMapping(value = "json/pub/err", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> jsonErr(@RequestBody UniMsg msg) {
+		System.out.println(msg.toString());
+		HttpHeaders headers = new HttpHeaders();		
+		try {			
+					
+			return new ResponseEntity<String>("", headers, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>(e.getCause().toString(), headers, HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@RequestMapping(value = "json/pub/success", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> jsonSuccess(@RequestBody UniMsg msg) {
+		System.out.println(msg.toString());
+		HttpHeaders headers = new HttpHeaders();		
+		try {			
+			
+			return new ResponseEntity<String>("", headers, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>(e.getCause().toString(), headers, HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@RequestMapping(value = "json/sub/confirm", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> jsonConfirm(@RequestBody UniMsg msg) {
+		System.out.println(msg.toString());
+		HttpHeaders headers = new HttpHeaders();		
+		try {			
+			IncomingBuffer ib = new IncomingBuffer();
+			ib.setJuuid(msg.getJuuid());
+			ib.setDatetime((new Date()).toString());
+			ib.setEventId(msg.getEventId());
+			ib.setMsg(msg.toString());
+			
+			appConfig.getMsgService().insert(ib);		
+			return new ResponseEntity<String>("", headers, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>(e.getCause().toString(), headers, HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 }

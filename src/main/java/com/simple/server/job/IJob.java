@@ -8,6 +8,9 @@ import com.simple.server.config.JobStatusType;
 public interface IJob {
 	void run() throws Exception;
 	String getKey();
+	Integer getGroupId();
+	Integer getOrderId();
+	
 	Date getJobWhen();
 	Date getJobUntil();
 	
@@ -17,4 +20,6 @@ public interface IJob {
 	JobStatusType getStatus();
 	void setStatus(JobStatusType status);
 	void setAppConfig(AppConfig appConfig);
+	String getJuuid();
+	void setJuuid(String juud);
 }

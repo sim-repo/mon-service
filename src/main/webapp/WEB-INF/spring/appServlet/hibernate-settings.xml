@@ -35,16 +35,20 @@
 			<props>
 				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
 				<!-- <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>-->								
-				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.show_sql">false</prop>
 				<prop key="hibernate.jdbc.batch_size">50</prop>
 			</props>
 		</property>	
 		<property name="mappingResources">
-			<list>
-				<value>hbm/PubError.hbm.xml</value>
+			<list>				
 				<value>hbm/PubHot.hbm.xml</value>
 				<value>hbm/PubLog.hbm.xml</value>
 				<value>hbm/PubSuccess.hbm.xml</value>		
+				<value>hbm/PubError.hbm.xml</value>
+				<value>hbm/SubLog.hbm.xml</value>
+				<value>hbm/SubSuccess.hbm.xml</value>		
+				<value>hbm/SubError.hbm.xml</value>
+				
 				<value>hbm/TestCaseAssert.hbm.xml</value>		
 				
 				<value>hbm/TestCaseJob.hbm.xml</value>

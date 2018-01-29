@@ -4,35 +4,35 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
-
 
 import com.simple.server.config.AppConfig;
 import com.simple.server.config.ContentType;
 import com.simple.server.config.JobStatusType;
+import com.simple.server.domain.contract.IContract;
+import com.simple.server.domain.contract.StatusMsg;
 import com.simple.server.domain.contract.UniMsg;
 import com.simple.server.domain.sys.SysMessage;
 import com.simple.server.domain.sys.TestCaseAssert;
 import com.simple.server.http.HttpImpl;
-import com.simple.server.job.time.MySchedule;
 
 
+public class TestCaseJob implements IJob {
 
-public class TestCaseJob implements IJob{
-
-	
 	private AppConfig appConfig;
+
+	private String testId;
+	private Integer orderId;
+	private Integer groupId;
 	
-	private String testId;	
 	private String eventId;
 	private String serviceHandler;
 	private String juuid;
-	private String senderId;	
+	private String senderId;
 	private String body;
 	private String contentType;
 
-	private Integer timeout;	
+	private Integer timeout;
 	private Date targetWhen;
 	private Date targetUntil;
 	private Long targetDelay;
@@ -40,60 +40,49 @@ public class TestCaseJob implements IJob{
 	private Date jobWhen;
 	private Date jobUntil;
 	private Long jobDelay;
-	private Long jobPeriod;	
+	private Long jobPeriod;
 	private String status;
+	private String clazzForRequest;
 	
+
 	private Boolean updateHashCodes;
 	private Boolean hasErrors;
 	private Date lastUpdatedDatetime;
+
 	
-	private Set<MySchedule> schedulers;
+
+	private List<TestCaseAssert> readTestCases() throws Exception {
+		Map<String, Object> map = new HashMap();
+		map.put("testId", this.testId);
+		return (List<TestCaseAssert>) this.appConfig.getMsgService().readbyCriteria(TestCaseAssert.class, map, 0, null);
+	}
+
+	private void sendRequest(IContract msg) throws Exception{
+		HttpImpl.doPrepareAndPost(msg, getServiceHandler(), getContentType() );
+	}
 	
-	private UniMsg uniMsg = null;
-	
-	@Override
-	public void run() throws Exception {
+	private Boolean assertEvent(List<TestCaseAssert> asserts, String juuid) throws Exception{
 		
-		System.out.println("running task");		
-		Boolean isErrors = false; 
+		Boolean isErrors = false;
+		List<SysMessage> res = null;
 		
-		Map<String, Object> map2 = new HashMap();
-		map2.put("testId", testId);
-		List<TestCaseAssert> asserts = (List<TestCaseAssert>) appConfig.getMsgService().readbyCriteria(TestCaseAssert.class, map2, 0,null);
-			
-		if(asserts != null) {
-			
-			System.out.println("asserts :" +asserts.size());
-			
-			if(uniMsg == null)
-				uniMsg = new UniMsg();
-			uniMsg.set(getSenderId(), getEventId(), getJuuid(), getBody());
-			String juuid = UUID.randomUUID().toString();
-			uniMsg.setJuuid(juuid);
-			HttpImpl.doPrepareAndPost(uniMsg, getServiceHandler(), getContentType() );
-			
-			Thread.currentThread().sleep(20000l);
-			
-			List<SysMessage> res = null;
-			for(TestCaseAssert asser: asserts) {
-				
+		for(TestCaseAssert asser: asserts) {		
 				Class clazz = Class.forName(asser.getSourceClass());
-				System.out.println(clazz);
-									
-				Map<String, Object> map1 = new HashMap();
-				map1.put("juuid", juuid);
-				res = (List<SysMessage>) appConfig.getMsgService().readbyCriteria(clazz, map1, 0,null);
+												
+				Map<String, Object> map = new HashMap();
+				map.put("juuid", juuid);
+				res = (List<SysMessage>) appConfig.getMsgService().readbyCriteria(clazz, map, 0,null);
 				//System.out.println(String.format("%s %s :",clazz.getSimpleName(),res.size()));
 				int hashcode = 0;
 				if(res!= null){
-					for(SysMessage s: res) {
+					for(SysMessage s: res) {						
 						hashcode += s.hashCode();						
-					}	
-					
-					System.out.println(String.format("%s , %s",clazz.getSimpleName(),hashcode  ));
+					}						
+					System.out.println(String.format("%s , %s",clazz.getSimpleName(), hashcode  ));
 					
 					if(this.updateHashCodes) {
-						asser.setAssertHashCode(""+hashcode);					
+						asser.setAssertHashCode(""+hashcode);		
+						asser.setHasErrors(false);
 						
 					}else {
 						Boolean isWell = (asser.getAssertHashCode().equals(""+hashcode));
@@ -104,21 +93,64 @@ public class TestCaseJob implements IJob{
 					}
 					appConfig.getMsgService().insert(asser);					
 				}
-			}		
-		}
-		
-		if(this.updateHashCodes) {
-			this.updateHashCodes = false;
-		}
-		
-		this.hasErrors = isErrors;
-		this.lastUpdatedDatetime = new Date();
-		
-		appConfig.getMsgService().insert(this);
-		System.out.println("well done");
-				
+			}	
+		return isErrors;
 	}
 	
+	private void initObject(IContract obj, String juuid) {
+		if(obj instanceof UniMsg) {
+			UniMsg uniMsg = (UniMsg)obj;
+			uniMsg.set(getSenderId(), getEventId(), juuid, getBody());
+			return;
+		}
+		if(obj instanceof StatusMsg) {
+			StatusMsg statusMsg = (StatusMsg)obj;
+			statusMsg.setEventId(eventId);			
+			statusMsg.set(getSenderId(), getEventId(), juuid, "1","Hello World!");
+			return;
+		}
+	}
+	
+	@Override
+	public void run() throws Exception {
+					
+		
+		Class c = Class.forName(this.clazzForRequest);
+		
+		IContract object = (IContract)c.newInstance();
+		
+				
+		String juuid = this.getJuuid();
+		if (juuid == null) {
+				juuid = UUID.randomUUID().toString();
+				this.setJuuid(juuid);
+		}
+		
+		initObject(object, juuid);			
+		sendRequest(object);
+		
+		List<TestCaseAssert> asserts = readTestCases();
+		
+		if(asserts == null)
+			return;
+										
+		Thread.currentThread().sleep(20000l);
+			
+		this.hasErrors = assertEvent(asserts, juuid);	
+		
+		
+		if(this.updateHashCodes){
+			this.updateHashCodes = false;
+		}
+
+		this.lastUpdatedDatetime=new Date();
+
+		appConfig.getMsgService().insert(this);
+		
+		System.out.println("well done");
+	}
+	
+
 	@Override
 	public String getKey() {		
 		return getTestId();
@@ -126,6 +158,22 @@ public class TestCaseJob implements IJob{
 
 	public String getTestId() {
 		return testId;
+	}
+	
+	public Integer getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(Integer orderId) {
+		this.orderId = orderId;
+	}
+
+	public Integer getGroupId() {
+		return groupId;
+	}
+
+	public void setGroupId(Integer groupId) {
+		this.groupId = groupId;
 	}
 
 	public void setTestId(String testId) {
@@ -170,16 +218,16 @@ public class TestCaseJob implements IJob{
 
 	public void setBody(String body) {
 		this.body = body;
-	}	
-	
+	}
+
 	public ContentType getContentType() {
 		return ContentType.valueOf(contentType);
 	}
-	
+
 	public void setContentType(ContentType contentType) {
 		this.contentType = contentType.toValue();
 	}
-	
+
 	public Integer getTimeout() {
 		return timeout;
 	}
@@ -187,7 +235,7 @@ public class TestCaseJob implements IJob{
 	public void setTimeout(Integer timeout) {
 		this.timeout = timeout;
 	}
-	
+
 	public Date getTargetWhen() {
 		return targetWhen;
 	}
@@ -267,7 +315,7 @@ public class TestCaseJob implements IJob{
 
 	@Override
 	public void setAppConfig(AppConfig appConfig) {
-		this.appConfig= appConfig;
+		this.appConfig = appConfig;
 	}
 
 	public Boolean getUpdateHashCodes() {
@@ -293,6 +341,13 @@ public class TestCaseJob implements IJob{
 	public void setLastUpdatedDatetime(Date lastUpdatedDatetime) {
 		this.lastUpdatedDatetime = lastUpdatedDatetime;
 	}
-		
-	
+
+	public String getClazzForRequest() {
+		return clazzForRequest;
+	}
+
+	public void setClazzForRequest(String clazzForRequest) {
+		this.clazzForRequest = clazzForRequest;
+	}
+
 }

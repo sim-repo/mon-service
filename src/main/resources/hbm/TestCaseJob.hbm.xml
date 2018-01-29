@@ -11,10 +11,14 @@
 			<generator class="assigned" />
 		</id>					
 				
+		<property name="groupId" column="[group_id]"/>
+		<property name="orderId" column="[order_id]"/>
+		
 		
 		<property name="eventId" column="[event_id]"/>
 		<property name="serviceHandler" column="[service_handler]" />
-		<property name="juuid" column="[juuid]" />
+		
+		<property name="clazzForRequest" column="[clazz]" />
 		<property name="senderId" column="[sender_id]"/>					
 		<property name="body" column="[body]" />
 		<property name="timeout" column="[timeout]" />		

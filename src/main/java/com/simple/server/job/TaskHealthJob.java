@@ -21,6 +21,11 @@ import com.simple.server.util.DateTimeConverter;
 @Scope("singleton")
 public class TaskHealthJob implements IJob{
 
+	
+	private Integer orderId;
+	private Integer groupId;
+	private String juuid;
+	
 	@Autowired
 	private AppConfig appConfig;	
 	
@@ -140,5 +145,33 @@ public class TaskHealthJob implements IJob{
 		// TODO Auto-generated method stub
 		
 	}
+
+	public Integer getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(Integer orderId) {
+		this.orderId = orderId;
+	}
+
+	public Integer getGroupId() {
+		return groupId;
+	}
+
+	public void setGroupId(Integer groupId) {
+		this.groupId = groupId;
+	}
+
+	@Override
+	public void setJuuid(String juud) {
+		this.juuid = juud;		
+	}
+
+	@Override
+	public String getJuuid() {
+		return this.juuid;
+	}
+	
+	
 
 }

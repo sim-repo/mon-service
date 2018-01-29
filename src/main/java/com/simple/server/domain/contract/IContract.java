@@ -17,4 +17,5 @@ public interface IContract extends Serializable {
 	
 	@JsonGetter("clazz")
 	String getClazz();
+	void setJuuid(String juud);
 }
