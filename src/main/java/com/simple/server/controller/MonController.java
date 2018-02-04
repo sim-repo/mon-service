@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.simple.server.config.AppConfig;
-import com.simple.server.config.OperationType;
 
 import com.simple.server.domain.contract.StatusMsg;
 import com.simple.server.domain.contract.UniMsg;
@@ -34,12 +33,13 @@ public class MonController {
 	@RequestMapping(value = "json/pub/uni", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> jsonPub(@RequestBody UniMsg msg) {	
 		HttpHeaders headers = new HttpHeaders();		
+		String checkmark = "[**pub - JSON**]";
 		try {			
 			IncomingBuffer ib = new IncomingBuffer();
 			ib.setJuuid(msg.getJuuid());
 			ib.setDatetime((new Date()).toString());
 			ib.setEventId(msg.getEventId());
-			ib.setMsg(msg.toString());
+			ib.setMsg(checkmark+ "  "+msg.toString());
 			
 			appConfig.getMsgService().insert(ib);		
 			return new ResponseEntity<String>("", headers, HttpStatus.OK);
@@ -52,9 +52,16 @@ public class MonController {
 	
 	@RequestMapping(value = "json/pub/err", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> jsonErr(@RequestBody UniMsg msg) {	
-		HttpHeaders headers = new HttpHeaders();		
+		HttpHeaders headers = new HttpHeaders();
+		String checkmark = "[**err - JSON**]";
 		try {			
-					
+			IncomingBuffer ib = new IncomingBuffer();
+			ib.setJuuid(msg.getJuuid());
+			ib.setDatetime((new Date()).toString());
+			ib.setEventId(msg.getEventId());
+			ib.setMsg(checkmark+ "  "+msg.toString());
+			
+			appConfig.getMsgService().insert(ib);				
 			return new ResponseEntity<String>("", headers, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -65,8 +72,14 @@ public class MonController {
 	@RequestMapping(value = "json/pub/success", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> jsonSuccess(@RequestBody UniMsg msg) {		
 		HttpHeaders headers = new HttpHeaders();		
+		String checkmark = "[**success - JSON**]";
 		try {			
-			
+			IncomingBuffer ib = new IncomingBuffer();
+			ib.setJuuid(msg.getJuuid());
+			ib.setDatetime((new Date()).toString());
+			ib.setEventId(msg.getEventId());
+			ib.setMsg(checkmark+ "  "+msg.toString());		
+			appConfig.getMsgService().insert(ib);
 			return new ResponseEntity<String>("", headers, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -76,13 +89,14 @@ public class MonController {
 	
 	@RequestMapping(value = "json/sub/confirm", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> jsonConfirm(@RequestBody StatusMsg msg) {		
-		HttpHeaders headers = new HttpHeaders();		
+		HttpHeaders headers = new HttpHeaders();
+		String checkmark = "[**Confirm - JSON**]";
 		try {			
 			IncomingBuffer ib = new IncomingBuffer();
 			ib.setJuuid(msg.getJuuid());
 			ib.setDatetime((new Date()).toString());
 			ib.setEventId(msg.getEventId());
-			ib.setMsg(msg.toString());
+			ib.setMsg(checkmark + "  " +msg.toString());
 			
 			appConfig.getMsgService().insert(ib);		
 			return new ResponseEntity<String>("", headers, HttpStatus.OK);
@@ -95,7 +109,8 @@ public class MonController {
 	
 	@RequestMapping(value = "xml/pub/uni", method = RequestMethod.POST, consumes = MediaType.APPLICATION_XML_VALUE)
 	public ResponseEntity<String> xmlPub(HttpServletRequest request, @RequestBody String xml) {
-		HttpHeaders headers = new HttpHeaders();		
+		HttpHeaders headers = new HttpHeaders();	
+		String checkmark = "[**pub - XML**]";
 		try {			
 			UniMsg msg = (UniMsg)ObjectConverter.xmlToObject(xml, UniMsg.class);	
 			
@@ -103,7 +118,7 @@ public class MonController {
 			ib.setJuuid(msg.getJuuid());
 			ib.setDatetime((new Date()).toString());
 			ib.setEventId(msg.getEventId());
-			ib.setMsg(msg.toString());
+			ib.setMsg(checkmark+ "  "+msg.toString());
 			
 			appConfig.getMsgService().insert(ib);		
 			return new ResponseEntity<String>("", headers, HttpStatus.OK);
@@ -116,13 +131,14 @@ public class MonController {
 	
 	@RequestMapping(value = "xml/sub/confirm", method = RequestMethod.POST, consumes = MediaType.APPLICATION_XML_VALUE)
 	public ResponseEntity<String> xmlConfirm(@RequestBody StatusMsg msg) {		
-		HttpHeaders headers = new HttpHeaders();		
+		HttpHeaders headers = new HttpHeaders();
+		String checkmark = "[**Confirm - XML**]";
 		try {			
 			IncomingBuffer ib = new IncomingBuffer();
 			ib.setJuuid(msg.getJuuid());
 			ib.setDatetime((new Date()).toString());
 			ib.setEventId(msg.getEventId());
-			ib.setMsg(msg.toString());
+			ib.setMsg(checkmark + "  " +msg.toString());
 			
 			appConfig.getMsgService().insert(ib);		
 			return new ResponseEntity<String>("", headers, HttpStatus.OK);
@@ -135,8 +151,14 @@ public class MonController {
 	@RequestMapping(value = "xml/pub/success", method = RequestMethod.POST, consumes = MediaType.APPLICATION_XML_VALUE)
 	public ResponseEntity<String> xmlSuccess(@RequestBody UniMsg msg) {		
 		HttpHeaders headers = new HttpHeaders();		
+		String checkmark = "[**success - XML**]";
 		try {			
-			
+			IncomingBuffer ib = new IncomingBuffer();
+			ib.setJuuid(msg.getJuuid());
+			ib.setDatetime((new Date()).toString());
+			ib.setEventId(msg.getEventId());
+			ib.setMsg(checkmark+ "  "+msg.toString());	
+			appConfig.getMsgService().insert(ib);
 			return new ResponseEntity<String>("", headers, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -148,8 +170,14 @@ public class MonController {
 	@RequestMapping(value = "xml/pub/err", method = RequestMethod.POST, consumes = MediaType.APPLICATION_XML_VALUE)
 	public ResponseEntity<String> xmlErr(@RequestBody UniMsg msg) {		
 		HttpHeaders headers = new HttpHeaders();		
+		String checkmark = "[**err - XML**]";
 		try {			
-			
+			IncomingBuffer ib = new IncomingBuffer();
+			ib.setJuuid(msg.getJuuid());
+			ib.setDatetime((new Date()).toString());
+			ib.setEventId(msg.getEventId());
+			ib.setMsg(checkmark+ "  "+msg.toString());	
+			appConfig.getMsgService().insert(ib);
 			return new ResponseEntity<String>("", headers, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
