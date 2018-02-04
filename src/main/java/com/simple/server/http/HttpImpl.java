@@ -48,21 +48,25 @@ public class HttpImpl {
 			converted = ObjectConverter.objectToJson(msg);
 			sContentType = "text/plain;charset=utf-8";
 		}
-		doPost(converted, url);
+		doPost(converted, url, contentType);
 	}
 	
-	public static void doPost(String reqBody, String url) throws Exception {						
+	public static void doPost(String reqBody, String url, ContentType contentType) throws Exception {						
 				URI uri = new URI(url);
 				RestTemplate restTemplate = new RestTemplate();			
 				HttpEntity<String> entity = null;
-				entity = new HttpEntity<String>(reqBody, createHeaders());
+				entity = new HttpEntity<String>(reqBody, createHeaders(contentType));
 				restTemplate.exchange(uri, HttpMethod.POST, entity, String.class);		
 	}
 	
-	public static HttpHeaders createHeaders() {
+	public static HttpHeaders createHeaders(ContentType contentType) {
 		return new HttpHeaders() {
 			{
-				setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+				if (ContentType.XmlPlainText.equals(contentType) || ContentType.ApplicationXml.equals(contentType)) {
+					setContentType(new MediaType("application", "xml", Charset.forName("UTF-8")));
+				} else if (ContentType.ApplicationJson.equals(contentType)) {
+					setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+				}
 			}
 		};
 	}

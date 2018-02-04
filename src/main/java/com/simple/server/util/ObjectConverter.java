@@ -72,7 +72,7 @@ public class ObjectConverter {
 	public synchronized static String objectToXml(Object object, Boolean useDeclaration) throws Exception{
 		XmlMapper xmlMapper = new XmlMapper();
 		xmlMapper.configure(ToXmlGenerator.Feature.WRITE_XML_DECLARATION, useDeclaration);
-		String xml = xmlMapper.writeValueAsString(object);		
+		String xml = xmlMapper.writer().withRootName("Message").writeValueAsString(object);		
 		return xml;
 	}
 	

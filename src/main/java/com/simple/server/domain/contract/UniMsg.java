@@ -1,5 +1,7 @@
 package com.simple.server.domain.contract;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -8,6 +10,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 @JsonAutoDetect
 @JsonDeserialize(as = UniMsg.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
+
+
+@XmlRootElement(name = "Message")
 public class UniMsg extends AContract{
 	
 	private static final long serialVersionUID = 1L;

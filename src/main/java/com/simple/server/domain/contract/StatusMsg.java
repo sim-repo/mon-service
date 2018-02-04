@@ -1,5 +1,12 @@
 package com.simple.server.domain.contract;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+@JsonAutoDetect
+@JsonDeserialize(as = StatusMsg.class)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class StatusMsg extends AContract{
 	
 	private static final long serialVersionUID = 1L;
@@ -43,5 +50,14 @@ public class StatusMsg extends AContract{
 		this.setCode(code);
 		this.setMessage(message);
 	}
+
+	@Override
+	public String toString() {
+		return "StatusMsg [code=" + code + ", message=" + message + ", methodHandler=" + methodHandler
+				+ ", operationType=" + operationType + ", responseURI=" + responseURI + ", responseContentType="
+				+ responseContentType + "]";
+	}
+	
+	
 	
 }

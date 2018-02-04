@@ -8,7 +8,7 @@ import com.simple.server.config.JobStatusType;
 public interface IJob {
 	void run() throws Exception;
 	String getKey();
-	Integer getGroupId();
+	String getGroupId();
 	Integer getOrderId();
 	
 	Date getJobWhen();

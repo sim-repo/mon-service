@@ -77,10 +77,18 @@ public class InitJobTask extends AbstractTask {
 		//	appConfig.getJobMgt().create(job);						
 		//}
 		
-		for (TestCaseJob job : jobs) {
-			job.setAppConfig(appConfig);
-			appConfig.getJobMgt().register(job);						
-		}			
+		for (int i=0; i <= 5; i++) {
+			for (TestCaseJob job : jobs) {
+				if(job.getOrderId() == i) {
+					System.out.println("JOB");
+					job.setAppConfig(appConfig);
+					System.out.println("before reg, current i: "+i);
+					appConfig.getJobMgt().register(job);
+					System.out.println("after reg, current i: "+i);
+					Thread.currentThread().sleep(100l);
+				}
+			}			
+		}				
 		Thread.currentThread().sleep(AppConfig.MAIN_TASK_AFTER_DONE_SLEEP);
 	}
 }

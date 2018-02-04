@@ -5,7 +5,7 @@
 
 <hibernate-mapping package="com.simple.server.domain.sys">
 						
-	<class name="LogSubSuccess" table="[log sub err]">
+	<class name="LogSubSuccess" table="[log sub success]">
 		
 		<id name="id" column="[id]">
 			<generator class="native" />

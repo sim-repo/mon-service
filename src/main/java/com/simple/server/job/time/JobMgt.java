@@ -21,7 +21,8 @@ import com.simple.server.job.TestCaseJob;
 @Scope("singleton")
 public class JobMgt {
 
-	private static final ConcurrentHashMap<Integer, TimerTask> TIMING_REGISTER = new ConcurrentHashMap<>();
+	// <job.groupId,..>
+	private static final ConcurrentHashMap<String, TimerTask> TIMING_REGISTER = new ConcurrentHashMap<>();
 	// <hashcode(job.groupId+job.orderId),..>
 	private static final ConcurrentHashMap<Integer, IJob> JOB_REGISTER = new ConcurrentHashMap<>();
 	
@@ -64,9 +65,11 @@ public class JobMgt {
 			TIMING_REGISTER.put(job.getGroupId(), timing);
 		}
 	}
+	
 
 	private synchronized void updateStatus(IJob job, JobStatusType status) throws Exception {
 		job.setStatus(status);
+		System.out.println(job.getKey()+":"+status);
 		appConfig.getMsgService().insert(job);
 	}
 
@@ -92,7 +95,7 @@ public class JobMgt {
 		}else {
 			timing.stopTiming();
 			timing.clear();
-			removeFromRegister(curJob);
+			removeGroupFromRegister(curJob.getGroupId());
 		}
 	}
 	
@@ -111,19 +114,22 @@ public class JobMgt {
 		tryNext(job, timing);
 	}
 			
-	public synchronized void removeFromRegister(IJob job) throws Exception{
+	public synchronized void removeGroupFromRegister(String jobGroupId) throws Exception{
 		Map<String, Object> map1 = new HashMap();
-		map1.put("groupId", job.getGroupId());
+		map1.put("groupId", jobGroupId);
 		List<TestCaseJob> jobs = (List<TestCaseJob>) appConfig.getMsgService().readbyCriteria(TestCaseJob.class, map1, 0,null);		
 		Integer maxlen = jobs.size();
 		
 		
-		for(int i = 0; i<maxlen; i++) {
-			if(JOB_REGISTER.containsKey(job.getGroupId().hashCode()+i))
-				JOB_REGISTER.remove(job.getGroupId().hashCode()+i);	
+		for(IJob j: jobs) {
+			Integer jobHashCode = getJobHashCode(j,0);		
+			if(JOB_REGISTER.containsKey(jobHashCode)) {
+				System.out.println(j.getKey()+": removed from register");				
+				JOB_REGISTER.remove(jobHashCode);	
+			}
 		}
 	
-		TIMING_REGISTER.remove(job.getGroupId());	
+		TIMING_REGISTER.remove(jobGroupId);	
 	}
 
 }

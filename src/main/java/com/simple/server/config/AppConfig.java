@@ -27,7 +27,7 @@ public class AppConfig {
 	
 	public final static Long MAIN_SLEEP = 5l;
 	public final static Long MAIN_PHASE_SLEEP = 2000l;
-	public final static Long MAIN_TASK_AFTER_DONE_SLEEP = 10000l;
+	public final static Long MAIN_TASK_AFTER_DONE_SLEEP = 20000l;
 	
 	private Subscriber subscriber = new Subscriber();
 

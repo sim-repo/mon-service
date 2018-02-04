@@ -22,8 +22,9 @@ public class TestCaseJob implements IJob {
 	private AppConfig appConfig;
 
 	private String testId;
+	private String groupId;	
 	private Integer orderId;
-	private Integer groupId;
+	
 	
 	private String eventId;
 	private String serviceHandler;
@@ -78,7 +79,7 @@ public class TestCaseJob implements IJob {
 					for(SysMessage s: res) {						
 						hashcode += s.hashCode();						
 					}						
-					System.out.println(String.format("%s , %s",clazz.getSimpleName(), hashcode  ));
+					//System.out.println(String.format("%s , %s",clazz.getSimpleName(), hashcode  ));
 					
 					if(this.updateHashCodes) {
 						asser.setAssertHashCode(""+hashcode);		
@@ -115,39 +116,38 @@ public class TestCaseJob implements IJob {
 	public void run() throws Exception {
 					
 		
-		Class c = Class.forName(this.clazzForRequest);
-		
-		IContract object = (IContract)c.newInstance();
-		
-				
-		String juuid = this.getJuuid();
-		if (juuid == null) {
-				juuid = UUID.randomUUID().toString();
-				this.setJuuid(juuid);
-		}
-		
-		initObject(object, juuid);			
-		sendRequest(object);
-		
-		List<TestCaseAssert> asserts = readTestCases();
-		
-		if(asserts == null)
-			return;
-										
-		Thread.currentThread().sleep(20000l);
+		try {
+			Class c = Class.forName(this.clazzForRequest);
 			
-		this.hasErrors = assertEvent(asserts, juuid);	
-		
-		
-		if(this.updateHashCodes){
-			this.updateHashCodes = false;
+			IContract object = (IContract)c.newInstance();
+			
+					
+			String juuid = this.getJuuid();
+			if (juuid == null) {
+					juuid = UUID.randomUUID().toString();
+					this.setJuuid(juuid);
+			}
+			
+			initObject(object, juuid);			
+			sendRequest(object);
+			
+			List<TestCaseAssert> asserts = readTestCases();
+			
+			if(asserts == null)
+				return;
+											
+			Thread.currentThread().sleep(20000l);
+				
+			this.hasErrors = assertEvent(asserts, juuid);	
+
+			this.lastUpdatedDatetime=new Date();
+
+			appConfig.getMsgService().insert(this);
+			
+			System.out.println(this.testId+": well done");
+		} catch (Exception e) {
+			throw new Exception("Mon: "+ e.getMessage());
 		}
-
-		this.lastUpdatedDatetime=new Date();
-
-		appConfig.getMsgService().insert(this);
-		
-		System.out.println("well done");
 	}
 	
 
@@ -168,11 +168,11 @@ public class TestCaseJob implements IJob {
 		this.orderId = orderId;
 	}
 
-	public Integer getGroupId() {
+	public String getGroupId() {
 		return groupId;
 	}
 
-	public void setGroupId(Integer groupId) {
+	public void setGroupId(String groupId) {
 		this.groupId = groupId;
 	}
 
