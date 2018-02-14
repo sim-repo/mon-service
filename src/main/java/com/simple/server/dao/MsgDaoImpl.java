@@ -12,11 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
+import com.simple.server.config.EndpointType;
 import com.simple.server.config.MiscType;
 import com.simple.server.domain.contract.IContract;
 import com.simple.server.domain.contract.UniMinMsg;
 import com.simple.server.domain.sys.SysMessage;
 import com.simple.server.job.IJob;
+import com.simple.server.mediators.CommandType;
 
 
 @Service("msgDao")
@@ -24,27 +26,35 @@ import com.simple.server.job.IJob;
 public class MsgDaoImpl implements MsgDao{
 
 	@Autowired
-	SessionFactory mysqlSessionFactory;
+	SessionFactory testTargetSessionFactory;
 		
+	@Autowired
+	SessionFactory monSessionFactory;
+	
 	@Override
-	public Session currentSession() throws Exception{				
-		return mysqlSessionFactory.getCurrentSession();
-		
+	public Session currentSession(EndpointType endpointType) throws Exception{		
+		switch ((EndpointType) endpointType) {
+			case TESTED:
+				return testTargetSessionFactory.getCurrentSession();
+			case MON:
+			return monSessionFactory.getCurrentSession();
+		}
+		return monSessionFactory.getCurrentSession();
 	}
 	
 	@Override
-	public void insert(IJob job) throws Exception {
-		currentSession().saveOrUpdate(job);	
+	public void insert(EndpointType endpointType, IJob job) throws Exception {
+		currentSession(endpointType).saveOrUpdate(job);	
 	}
 	
 	@Override
-	public void insert(SysMessage msg) throws Exception {
-		currentSession().saveOrUpdate(msg);		
+	public void insert(EndpointType endpointType, SysMessage msg) throws Exception {
+		currentSession(endpointType).saveOrUpdate(msg);		
 	}
 	
 	@Override
-	public List<?> readbyCriteria(Class<?> clazz, Map<String,Object> params, int topNum, Map<String,MiscType> orders) throws Exception{		
-		Criteria criteria = currentSession().createCriteria(clazz);	
+	public List<?> readbyCriteria(EndpointType endpointType, Class<?> clazz, Map<String,Object> params, int topNum, Map<String,MiscType> orders) throws Exception{		
+		Criteria criteria = currentSession(endpointType).createCriteria(clazz);	
 		if(params != null)
 			for(Map.Entry<String,Object> pair: params.entrySet()){						
 				criteria.add(Restrictions.eq(pair.getKey(), pair.getValue()));			

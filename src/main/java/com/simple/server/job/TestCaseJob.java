@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import com.simple.server.config.AppConfig;
 import com.simple.server.config.ContentType;
+import com.simple.server.config.EndpointType;
 import com.simple.server.config.JobStatusType;
 import com.simple.server.domain.contract.IContract;
 import com.simple.server.domain.contract.StatusMsg;
@@ -46,6 +47,7 @@ public class TestCaseJob implements IJob {
 	private String clazzForRequest;
 	
 
+	private Boolean isSendRequest;
 	private Boolean updateHashCodes;
 	private Boolean hasErrors;
 	private Date lastUpdatedDatetime;
@@ -55,7 +57,7 @@ public class TestCaseJob implements IJob {
 	private List<TestCaseAssert> readTestCases() throws Exception {
 		Map<String, Object> map = new HashMap();
 		map.put("testId", this.testId);
-		return (List<TestCaseAssert>) this.appConfig.getMsgService().readbyCriteria(TestCaseAssert.class, map, 0, null);
+		return (List<TestCaseAssert>) this.appConfig.getMsgService().readbyCriteria(EndpointType.MON, TestCaseAssert.class, map, 0, null);
 	}
 
 	private void sendRequest(IContract msg) throws Exception{
@@ -72,7 +74,7 @@ public class TestCaseJob implements IJob {
 												
 				Map<String, Object> map = new HashMap();
 				map.put("juuid", juuid);
-				res = (List<SysMessage>) appConfig.getMsgService().readbyCriteria(clazz, map, 0,null);
+				res = (List<SysMessage>) appConfig.getMsgService().readbyCriteria(EndpointType.TESTED, clazz, map, 0,null);
 				//System.out.println(String.format("%s %s :",clazz.getSimpleName(),res.size()));
 				int hashcode = 0;
 				if(res!= null){
@@ -92,7 +94,7 @@ public class TestCaseJob implements IJob {
 							isErrors = true;
 						}
 					}
-					appConfig.getMsgService().insert(asser);					
+					appConfig.getMsgService().insert(EndpointType.MON, asser);					
 				}
 			}	
 		return isErrors;
@@ -117,33 +119,35 @@ public class TestCaseJob implements IJob {
 					
 		
 		try {
-			Class c = Class.forName(this.clazzForRequest);
 			
-			IContract object = (IContract)c.newInstance();
 			
-					
-			String juuid = this.getJuuid();
+			this.setJuuid(this.getJuuid());
+			
 			if (juuid == null) {
 					juuid = UUID.randomUUID().toString();
 					this.setJuuid(juuid);
+			}			
+			
+			if (isSendRequest) {
+				Class c = Class.forName(this.clazzForRequest);
+				IContract object = (IContract)c.newInstance();
+				initObject(object, juuid);	
+				sendRequest(object);
 			}
-			
-			initObject(object, juuid);			
-			sendRequest(object);
-			
+			System.out.println("check00");			
 			List<TestCaseAssert> asserts = readTestCases();
 			
 			if(asserts == null)
 				return;
 											
 			Thread.currentThread().sleep(20000l);
-				
+			System.out.println("check0");	
 			this.hasErrors = assertEvent(asserts, juuid);	
-
+			System.out.println("check1");
 			this.lastUpdatedDatetime=new Date();
 
-			appConfig.getMsgService().insert(this);
-			
+			appConfig.getMsgService().insert(EndpointType.MON, this);
+			System.out.println("check2");
 			System.out.println(this.testId+": well done");
 		} catch (Exception e) {
 			throw new Exception("Mon: "+ e.getMessage());
@@ -350,4 +354,12 @@ public class TestCaseJob implements IJob {
 		this.clazzForRequest = clazzForRequest;
 	}
 
+	public Boolean getIsSendRequest() {
+		return isSendRequest;
+	}
+
+	public void setIsSendRequest(Boolean isSendRequest) {
+		this.isSendRequest = isSendRequest;
+	}
+	
 }

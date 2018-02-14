@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import com.simple.server.config.AppConfig;
+import com.simple.server.config.EndpointType;
 import com.simple.server.config.JobStatusType;
 import com.simple.server.job.IJob;
 import com.simple.server.job.TestCaseJob;
@@ -70,7 +71,7 @@ public class JobMgt {
 	private synchronized void updateStatus(IJob job, JobStatusType status) throws Exception {
 		job.setStatus(status);
 		System.out.println(job.getKey()+":"+status);
-		appConfig.getMsgService().insert(job);
+		appConfig.getMsgService().insert(EndpointType.MON, job);
 	}
 
 	public synchronized Timing getExists(IJob job) throws Exception {
@@ -117,7 +118,7 @@ public class JobMgt {
 	public synchronized void removeGroupFromRegister(String jobGroupId) throws Exception{
 		Map<String, Object> map1 = new HashMap();
 		map1.put("groupId", jobGroupId);
-		List<TestCaseJob> jobs = (List<TestCaseJob>) appConfig.getMsgService().readbyCriteria(TestCaseJob.class, map1, 0,null);		
+		List<TestCaseJob> jobs = (List<TestCaseJob>) appConfig.getMsgService().readbyCriteria(EndpointType.MON, TestCaseJob.class, map1, 0,null);		
 		Integer maxlen = jobs.size();
 		
 		

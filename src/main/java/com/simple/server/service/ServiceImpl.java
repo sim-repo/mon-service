@@ -10,6 +10,7 @@ import org.springframework.messaging.MessageChannel;
 import org.springframework.stereotype.Service;
 
 import com.simple.server.config.AppConfig;
+import com.simple.server.config.EndpointType;
 import com.simple.server.config.MiscType;
 import com.simple.server.domain.contract.IContract;
 import com.simple.server.domain.contract.UniMinMsg;
@@ -45,19 +46,19 @@ public class ServiceImpl implements IService{
 	
 
 	@Override
-	public void insert(IJob job) throws Exception {
-		 getAppConfig().getMsgDao().insert(job);		
+	public void insert(EndpointType endpointType, IJob job) throws Exception {
+		 getAppConfig().getMsgDao().insert(endpointType, job);		
 	}	
 	
 	@Override
-	public void insert(SysMessage msg) throws Exception {
-		 getAppConfig().getMsgDao().insert(msg);
+	public void insert(EndpointType endpointType, SysMessage msg) throws Exception {
+		 getAppConfig().getMsgDao().insert(endpointType, msg);
 		
 	}
 	
 	@Override
-	public List<?> readbyCriteria(Class<?> clazz, Map<String, Object> params, int topNum, Map<String, MiscType> orders) throws Exception {
-		List<?> res = getAppConfig().getMsgDao().readbyCriteria(clazz, params, topNum, orders);
+	public List<?> readbyCriteria(EndpointType endpointType, Class<?> clazz, Map<String, Object> params, int topNum, Map<String, MiscType> orders) throws Exception {
+		List<?> res = getAppConfig().getMsgDao().readbyCriteria(endpointType, clazz, params, topNum, orders);
 		return res;
 	}	
 }

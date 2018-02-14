@@ -7,6 +7,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.messaging.MessageChannel;
 
+import com.simple.server.config.EndpointType;
 import com.simple.server.config.MiscType;
 import com.simple.server.domain.contract.IContract;
 import com.simple.server.domain.contract.UniMinMsg;
@@ -19,10 +20,10 @@ public interface IService {
 
 	
 	@Transactional()
-	void insert(IJob job) throws Exception;
+	void insert(EndpointType endpointType, IJob job) throws Exception;
 	@Transactional()
-	void insert(SysMessage msg) throws Exception;
+	void insert(EndpointType endpointType, SysMessage msg) throws Exception;
 	@Transactional()
-	List<?> readbyCriteria(Class<?> clazz, Map<String,Object> params, int topNum, Map<String,MiscType> orders) throws Exception;
+	List<?> readbyCriteria(EndpointType endpointType, Class<?> clazz, Map<String,Object> params, int topNum, Map<String,MiscType> orders) throws Exception;
 
 }

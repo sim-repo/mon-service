@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import com.simple.server.config.AppConfig;
+import com.simple.server.config.EndpointType;
 import com.simple.server.config.JobStatusType;
 import com.simple.server.job.TestCaseJob;
 import com.simple.server.job.TaskHealthJob;
@@ -60,7 +61,7 @@ public class InitJobTask extends AbstractTask {
 	@Override
 	public void task() throws Exception {
 
-		List<TestCaseJob> jobs = (List<TestCaseJob>) appConfig.getMsgService().readbyCriteria(TestCaseJob.class, map1, 0,null);
+		List<TestCaseJob> jobs = (List<TestCaseJob>) appConfig.getMsgService().readbyCriteria(EndpointType.MON, TestCaseJob.class, map1, 0,null);
 				
 		//List<MySchedule> sch = (List<MySchedule>) appConfig.getMsgService().readbyCriteria(MySchedule.class, null, 0,null);
 		

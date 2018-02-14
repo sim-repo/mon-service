@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.simple.server.config.AppConfig;
-
+import com.simple.server.config.EndpointType;
 import com.simple.server.domain.contract.StatusMsg;
 import com.simple.server.domain.contract.UniMsg;
 import com.simple.server.domain.sys.IncomingBuffer;
@@ -41,7 +41,7 @@ public class MonController {
 			ib.setEventId(msg.getEventId());
 			ib.setMsg(checkmark+ "  "+msg.toString());
 			
-			appConfig.getMsgService().insert(ib);		
+			appConfig.getMsgService().insert(EndpointType.MON, ib);		
 			return new ResponseEntity<String>("", headers, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -61,7 +61,7 @@ public class MonController {
 			ib.setEventId(msg.getEventId());
 			ib.setMsg(checkmark+ "  "+msg.toString());
 			
-			appConfig.getMsgService().insert(ib);				
+			appConfig.getMsgService().insert(EndpointType.MON, ib);				
 			return new ResponseEntity<String>("", headers, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -79,7 +79,7 @@ public class MonController {
 			ib.setDatetime((new Date()).toString());
 			ib.setEventId(msg.getEventId());
 			ib.setMsg(checkmark+ "  "+msg.toString());		
-			appConfig.getMsgService().insert(ib);
+			appConfig.getMsgService().insert(EndpointType.MON, ib);
 			return new ResponseEntity<String>("", headers, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -98,7 +98,7 @@ public class MonController {
 			ib.setEventId(msg.getEventId());
 			ib.setMsg(checkmark + "  " +msg.toString());
 			
-			appConfig.getMsgService().insert(ib);		
+			appConfig.getMsgService().insert(EndpointType.MON, ib);		
 			return new ResponseEntity<String>("", headers, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -120,7 +120,7 @@ public class MonController {
 			ib.setEventId(msg.getEventId());
 			ib.setMsg(checkmark+ "  "+msg.toString());
 			
-			appConfig.getMsgService().insert(ib);		
+			appConfig.getMsgService().insert(EndpointType.MON, ib);		
 			return new ResponseEntity<String>("", headers, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -140,7 +140,7 @@ public class MonController {
 			ib.setEventId(msg.getEventId());
 			ib.setMsg(checkmark + "  " +msg.toString());
 			
-			appConfig.getMsgService().insert(ib);		
+			appConfig.getMsgService().insert(EndpointType.MON, ib);		
 			return new ResponseEntity<String>("", headers, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -158,7 +158,7 @@ public class MonController {
 			ib.setDatetime((new Date()).toString());
 			ib.setEventId(msg.getEventId());
 			ib.setMsg(checkmark+ "  "+msg.toString());	
-			appConfig.getMsgService().insert(ib);
+			appConfig.getMsgService().insert(EndpointType.MON, ib);
 			return new ResponseEntity<String>("", headers, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -177,7 +177,7 @@ public class MonController {
 			ib.setDatetime((new Date()).toString());
 			ib.setEventId(msg.getEventId());
 			ib.setMsg(checkmark+ "  "+msg.toString());	
-			appConfig.getMsgService().insert(ib);
+			appConfig.getMsgService().insert(EndpointType.MON, ib);
 			return new ResponseEntity<String>("", headers, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
