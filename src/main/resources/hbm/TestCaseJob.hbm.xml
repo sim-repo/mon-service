@@ -21,6 +21,7 @@
 		<property name="clazzForRequest" column="[clazz]" />
 		<property name="senderId" column="[sender_id]"/>					
 		<property name="body" column="[body]" />
+		<property name="bodyFilepath" column="[body_file_path]" />		
 		<property name="juuid" column="[uuid]" />
 		<property name="timeout" column="[timeout]" />		
 				
@@ -38,6 +39,8 @@
 		<property name="hasErrors" column="[has_errors]" />
 		<property name="lastUpdatedDatetime" column="[last_checking_datetime]" />
 		<property name="isSendRequest" column="[is_send_request]" />
+		
+		
 		
 		
 		<property name="contentType" column="[content_type]">

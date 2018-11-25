@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.simple.server.config.AppConfig;
 import com.simple.server.config.EndpointType;
+import com.simple.server.config.OperationType;
 import com.simple.server.domain.contract.StatusMsg;
 import com.simple.server.domain.contract.UniMsg;
 import com.simple.server.domain.sys.IncomingBuffer;
@@ -35,13 +36,16 @@ public class MonController {
 		HttpHeaders headers = new HttpHeaders();		
 		String checkmark = "[**pub - JSON**]";
 		try {			
+			
+			System.out.println("bytes:"+msg.getBody().getBytes().length);
+			
 			IncomingBuffer ib = new IncomingBuffer();
 			ib.setJuuid(msg.getJuuid());
 			ib.setDatetime((new Date()).toString());
 			ib.setEventId(msg.getEventId());
-			ib.setMsg(checkmark+ "  "+msg.toString());
+			ib.setMsg(checkmark+ "  "+msg.toString() );
 			
-			appConfig.getMsgService().insert(EndpointType.MON, ib);		
+		//	appConfig.getMsgService().insert(EndpointType.MON, ib);		
 			return new ResponseEntity<String>("", headers, HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -87,6 +91,49 @@ public class MonController {
 		}
 	}
 	
+	
+	@RequestMapping(value = "json/pub/origin/success", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> jsonOriginSuccess(HttpServletRequest request, @RequestBody String json) {
+		HttpHeaders headers = new HttpHeaders();		
+		try {
+							
+			
+			System.out.println(json);
+			return new ResponseEntity<String>("", headers, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>(e.getCause().toString(), headers, HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@RequestMapping(value = "json/pub/origin/uni", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> jsonOriginUni(HttpServletRequest request, @RequestBody String json) {
+		HttpHeaders headers = new HttpHeaders();		
+		try {
+							
+			
+			System.out.println(json);
+		return new ResponseEntity<String>("", headers, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>(e.getCause().toString(), headers, HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@RequestMapping(value = "json/pub/origin/err", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> jsonOriginErr(HttpServletRequest request, @RequestBody String json) {
+		HttpHeaders headers = new HttpHeaders();		
+		try {
+							
+			
+			System.out.println(json);
+			return new ResponseEntity<String>("", headers, HttpStatus.OK);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>(e.getCause().toString(), headers, HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 	@RequestMapping(value = "json/sub/confirm", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> jsonConfirm(@RequestBody StatusMsg msg) {		
 		HttpHeaders headers = new HttpHeaders();
@@ -105,6 +152,22 @@ public class MonController {
 			return new ResponseEntity<String>(e.getCause().toString(), headers, HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	@RequestMapping(value = "json/pub/timeout", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> jsonPubTimeout(@RequestBody UniMsg msg) {	
+		HttpHeaders headers = new HttpHeaders();		
+		String checkmark = "[**pub - JSON**]";
+		try {			
+			while (true) {
+				Thread.currentThread().sleep(1000);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>(e.getCause().toString(), headers, HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 	
 	
 	@RequestMapping(value = "xml/pub/uni", method = RequestMethod.POST, consumes = MediaType.APPLICATION_XML_VALUE)
@@ -184,4 +247,7 @@ public class MonController {
 			return new ResponseEntity<String>(e.getCause().toString(), headers, HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	
+	
 }

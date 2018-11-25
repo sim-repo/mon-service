@@ -1,5 +1,8 @@
 package com.simple.server.job;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +35,7 @@ public class TestCaseJob implements IJob {
 	private String juuid;
 	private String senderId;
 	private String body;
+	private String bodyFilepath;
 	private String contentType;
 
 	private Integer timeout;
@@ -51,7 +55,7 @@ public class TestCaseJob implements IJob {
 	private Boolean updateHashCodes;
 	private Boolean hasErrors;
 	private Date lastUpdatedDatetime;
-
+   
 	
 
 	private List<TestCaseAssert> readTestCases() throws Exception {
@@ -103,7 +107,7 @@ public class TestCaseJob implements IJob {
 	private void initObject(IContract obj, String juuid) {
 		if(obj instanceof UniMsg) {
 			UniMsg uniMsg = (UniMsg)obj;
-			uniMsg.set(getSenderId(), getEventId(), juuid, getBody());
+			uniMsg.set(getSenderId(), getEventId(), juuid, bodyFilepath != null ? readFile(getBodyFilepath()) : getBody());
 			return;
 		}
 		if(obj instanceof StatusMsg) {
@@ -112,6 +116,25 @@ public class TestCaseJob implements IJob {
 			statusMsg.set(getSenderId(), getEventId(), juuid, "1","Hello World!");
 			return;
 		}
+	}
+	
+	private String readFile(String filepath) {
+		
+		
+		StringBuilder string = new StringBuilder();
+		try (BufferedReader br = new BufferedReader(new FileReader(filepath))) {
+
+			String sCurrentLine;
+
+			while ((sCurrentLine = br.readLine()) != null) {
+				string.append(sCurrentLine);
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return string.toString();
 	}
 	
 	@Override
@@ -217,11 +240,20 @@ public class TestCaseJob implements IJob {
 	}
 
 	public String getBody() {
+		
 		return body;
 	}
 
 	public void setBody(String body) {
 		this.body = body;
+	}
+
+	public String getBodyFilepath() {		
+		return bodyFilepath;
+	}
+
+	public void setBodyFilepath(String bodyFilepath) {
+		this.bodyFilepath = bodyFilepath;
 	}
 
 	public ContentType getContentType() {

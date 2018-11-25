@@ -18,41 +18,85 @@
 		http://activemq.apache.org/schema/core http://www.springframework.org/schema/tx
 		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/jms">
 
-	<bean id="mysqlDS"
+	
+	
+	<bean id="localDS"
 		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
 		<property name="url" value="jdbc:mysql://localhost:3306/jdb?serverTimezone=UTC&amp;autoReconnect=true&amp;useSSL=false" />
 		<property name="username" value="root" />
 		<property name="password" value="root" />
 	</bean>
+	
+	
+	<bean id="testTargetDS"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://msk10websvc2:3306/jdb?serverTimezone=UTC&amp;autoReconnect=true&amp;useSSL=false" />
+		<property name="username" value="root" />
+		<property name="password" value="root" />
+	</bean>
 
 
-	<bean id="mysqlSessionFactory"
+	<bean id="testTargetSessionFactory"
 		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-		<property name="dataSource" ref="mysqlDS" />
+		<property name="dataSource" ref="testTargetDS" />
 		
 		<property name="hibernateProperties">
 			<props>
 				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
 				<!-- <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>-->								
-				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.show_sql">false</prop>
 				<prop key="hibernate.jdbc.batch_size">50</prop>
 			</props>
 		</property>	
 		<property name="mappingResources">
-			<list>
-				<value>hbm/TestLifecycle.hbm.xml</value>
+			<list>				
+				<value>hbm/PubHot.hbm.xml</value>
+				<value>hbm/PubLog.hbm.xml</value>
+				<value>hbm/PubSuccess.hbm.xml</value>		
+				<value>hbm/PubError.hbm.xml</value>
+				<value>hbm/SubLog.hbm.xml</value>
+				<value>hbm/SubSuccess.hbm.xml</value>		
+				<value>hbm/SubError.hbm.xml</value>										
+			</list>
+		</property>			
+	</bean>
+	
+	
+	<bean id="monSessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="localDS" />
+		
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+				<!-- <prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>-->								
+				<prop key="hibernate.show_sql">false</prop>
+				<prop key="hibernate.jdbc.batch_size">50</prop>
+			</props>
+		</property>	
+		<property name="mappingResources">
+			<list>								
+				<value>hbm/TestCaseAssert.hbm.xml</value>						
+				<value>hbm/TestCaseJob.hbm.xml</value>
 				<value>hbm/TestScheduler.hbm.xml</value>
 				<value>hbm/TestIncomingBuffer.hbm.xml</value>						
 			</list>
 		</property>			
 	</bean>
 	
-	
 	<bean id="transactionManager"
 		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
-		<property name="sessionFactory" ref="mysqlSessionFactory" />
+		<property name="sessionFactory" ref="testTargetSessionFactory" />
 	</bean>
+	
+	<bean id="transactionManager2"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="monSessionFactory" />
+	</bean>
+	
+	
 
 	<tx:annotation-driven/>
 		
